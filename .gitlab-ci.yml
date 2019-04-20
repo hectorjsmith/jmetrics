@@ -1,0 +1,33 @@
+image: maven:3.5-jdk-8
+
+stages:
+- validate
+- compile
+- test
+
+validate:
+  stage: validate
+  script: "mvn validate"
+
+checkstyle:
+  stage: validate
+  script: "mvn site checkstyle:check"
+  allow_failure: true
+  artifacts:
+    when: on_failure
+    paths:
+    - target/site
+    expire_in: 1 day
+
+compile:
+  stage: compile
+  script: "mvn compile"
+
+test:
+  stage: test
+  script: "mvn test -B"
+  artifacts:
+    when: always
+    paths:
+    - target/surefire-reports
+    expire_in: 1 day
