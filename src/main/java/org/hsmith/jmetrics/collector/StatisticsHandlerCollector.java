@@ -1,15 +1,22 @@
 package org.hsmith.jmetrics.collector;
 
 import org.eclipse.jetty.server.handler.StatisticsHandler;
+import org.hsmith.jmetrics.metrics.MetricBuilderFactory;
 
 
-final class StatisticsHandlerCollector extends BaseCollector {
+public final class StatisticsHandlerCollector extends BaseCollector {
     private final StatisticsHandler statisticsHandler;
+    private final MetricBuilderFactory metricBuilderFactory;
 
-    private StatisticsHandlerCollector(final StatisticsHandler statisticsHandler) {
+    public StatisticsHandlerCollector(final StatisticsHandler statisticsHandler,
+                                      final MetricBuilderFactory metricBuilderFactory) {
         this.statisticsHandler = statisticsHandler;
+        this.metricBuilderFactory = metricBuilderFactory;
+        buildMetrics();
+    }
 
-        // super.addMetric(null);
+    private void buildMetrics() {
+        // TODO
     }
 
 

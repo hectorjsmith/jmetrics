@@ -7,7 +7,11 @@ import org.apache.log4j.Logger;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.StatisticsHandler;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
+import org.hsmith.jmetrics.collector.QueuedThreadPoolCollector;
+import org.hsmith.jmetrics.collector.StatisticsHandlerCollector;
 import org.hsmith.jmetrics.config.MetricServerConfig;
+import org.hsmith.jmetrics.metrics.MetricBuilderFactory;
+import org.hsmith.jmetrics.metrics.impl.MetricBuilderFactoryImpl;
 import org.hsmith.jmetrics.server.MetricServer;
 
 import java.io.IOException;
@@ -49,11 +53,12 @@ public final class MetricServerImpl implements MetricServer {
 
     private void setupMetricCollectors(final QueuedThreadPool queuedThreadPool,
                                        final StatisticsHandler statisticsHandler) {
+
+        MetricBuilderFactory metricBuilderFactory = new MetricBuilderFactoryImpl();
+
         // Default JVM metrics
         DefaultExports.initialize();
-
-        // Initializers
-//        StatisticsHandlerCollector.initialize(statisticsHandler);
-//        QueuedThreadPoolCollector.initialize(queuedThreadPool);
+        new QueuedThreadPoolCollector(queuedThreadPool, metricBuilderFactory).register();
+        new StatisticsHandlerCollector(statisticsHandler, metricBuilderFactory).register();
     }
 }
