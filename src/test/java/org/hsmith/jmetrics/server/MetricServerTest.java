@@ -22,7 +22,7 @@ class MetricServerTest {
 
 
     @Test
-    void startServerTest() throws IOException, InterruptedException {
+    void startServerTest() throws IOException {
         MetricServerConfig config = mock(MetricServerConfig.class);
         when(config.getServerHttpPort()).thenReturn(9977);
         when(config.getServerMaxThreads()).thenReturn(200);
