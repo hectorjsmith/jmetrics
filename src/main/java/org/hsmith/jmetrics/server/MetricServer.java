@@ -4,4 +4,6 @@ import java.io.IOException;
 
 public interface MetricServer {
     void startServer() throws IOException;
+
+    void stopServer();
 }

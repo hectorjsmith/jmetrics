@@ -15,8 +15,9 @@ import java.io.IOException;
 public final class MetricServerImpl implements MetricServer {
     private final Logger logger;
     private final MetricServerConfig config;
+    private HTTPServer httpServer;
 
-    public MetricServerImpl(final MetricServerConfig config) {
+    MetricServerImpl(final MetricServerConfig config) {
         this.logger = LogManager.getLogger(this.getClass());
         this.config = config;
     }
@@ -35,9 +36,15 @@ public final class MetricServerImpl implements MetricServer {
         // Setup server
         Server metricsServer = new Server(queuedThreadPool);
         metricsServer.setHandler(statisticsHandler);
-        new HTTPServer(config.getServerHttpPort());
+        this.httpServer = new HTTPServer(config.getServerHttpPort());
 
-        logger.info("Metrics server setup on port " + config.getServerHttpPort());
+        logger.info("Metrics server started on port " + config.getServerHttpPort());
+    }
+
+    @Override
+    public void stopServer() {
+        logger.info("Stopping metrics server");
+        this.httpServer.stop();
     }
 
     private void setupMetricCollectors(final QueuedThreadPool queuedThreadPool,
