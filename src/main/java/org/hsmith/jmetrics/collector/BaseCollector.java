@@ -1,6 +1,7 @@
 package org.hsmith.jmetrics.collector;
 
 import org.hsmith.jmetrics.metrics.Metric;
+import org.hsmith.jmetrics.metrics.MetricSample;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,18 +25,26 @@ public abstract class BaseCollector extends io.prometheus.client.Collector imple
         this.metricFamilySamples.add(metricToMetricFamilySample(metric));
     }
 
-    private MetricFamilySamples metricToMetricFamilySample(final Metric<?> metric) {
+    private MetricFamilySamples metricToMetricFamilySample(final Metric metric) {
         return new MetricFamilySamples(
                 metric.getMetricName(),
                 metric.getMetricType().getCollectorType(),
                 metric.getMetricHelp(),
-                Collections.singletonList(
-                        new MetricFamilySamples.Sample(
-                                metric.getMetricName(),
-                                metric.getMetricLabelNames(),
-                                metric.getMetricLabelValues(),
-                                metric.getMetricValue())
-                )
+                metricToMetricFamilySampleSamples(metric)
         );
+    }
+
+    private List<MetricFamilySamples.Sample> metricToMetricFamilySampleSamples(final Metric metric) {
+        List<MetricFamilySamples.Sample> sampleList = new ArrayList<>();
+
+        for (MetricSample sample : metric.getMetricSamples()) {
+            sampleList.add(new MetricFamilySamples.Sample(
+                    metric.getMetricName(),
+                    Collections.singletonList(sample.getMetricLabelName()),
+                    Collections.singletonList(sample.getMetricLabelValue()),
+                    sample.getSampleValue()
+            ));
+        }
+        return sampleList;
     }
 }
