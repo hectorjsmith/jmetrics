@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.StatisticsHandler;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
+import org.hsmith.jmetrics.collector.Collector;
 import org.hsmith.jmetrics.collector.QueuedThreadPoolCollector;
 import org.hsmith.jmetrics.collector.JettyStatisticsCollector;
 import org.hsmith.jmetrics.config.MetricServerConfig;
@@ -15,15 +16,19 @@ import org.hsmith.jmetrics.metrics.impl.MetricBuilderFactoryImpl;
 import org.hsmith.jmetrics.server.MetricServer;
 
 import java.io.IOException;
+import java.util.Set;
 
 public final class MetricServerImpl implements MetricServer {
     private final Logger logger;
     private final MetricServerConfig config;
+    private final Set<Collector> collectorSet;
     private HTTPServer httpServer;
 
-    MetricServerImpl(final MetricServerConfig config) {
+    MetricServerImpl(final MetricServerConfig config,
+                     final Set<Collector> collectorSet) {
         this.logger = LogManager.getLogger(this.getClass());
         this.config = config;
+        this.collectorSet = collectorSet;
     }
 
     @Override

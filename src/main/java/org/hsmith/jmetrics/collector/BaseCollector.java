@@ -11,7 +11,7 @@ public abstract class BaseCollector extends io.prometheus.client.Collector imple
 
     private final List<MetricFamilySamples> metricFamilySamples;
 
-    protected BaseCollector() {
+    BaseCollector() {
         this.metricFamilySamples = new ArrayList<>();
     }
 
