@@ -17,25 +17,25 @@ public final class QueuedThreadPoolCollector extends BaseCollector {
     }
 
     private void buildMetrics() {
-        super.addMetric(this.metricBuilderFactory.newInstance()
+        super.addMetric(metricBuilderFactory.newInstance()
                 .withMetricType(MetricType.GAUGE)
                 .withMetricName("jetty_queued_thread_pool_threads")
                 .withMetricHelp("Number of total threads")
                 .withMetricSample(queuedThreadPool::getThreads)
                 .build());
-        super.addMetric(this.metricBuilderFactory.newInstance()
+        super.addMetric(metricBuilderFactory.newInstance()
                 .withMetricType(MetricType.GAUGE)
                 .withMetricName("jetty_queued_thread_pool_utilization")
                 .withMetricHelp("Percentage of threads in use")
-                .withMetricSample(() -> this.queuedThreadPool.getThreads() / this.queuedThreadPool.getMaxThreads())
+                .withMetricSample(() -> queuedThreadPool.getThreads() / queuedThreadPool.getMaxThreads())
                 .build());
-        super.addMetric(this.metricBuilderFactory.newInstance()
+        super.addMetric(metricBuilderFactory.newInstance()
                 .withMetricType(MetricType.GAUGE)
                 .withMetricName("jetty_queued_thread_pool_threads_idle")
                 .withMetricHelp("Number of idle threads")
                 .withMetricSample(queuedThreadPool::getIdleThreads)
                 .build());
-        super.addMetric(this.metricBuilderFactory.newInstance()
+        super.addMetric(metricBuilderFactory.newInstance()
                 .withMetricType(MetricType.GAUGE)
                 .withMetricName("jetty_queued_thread_pool_jobs")
                 .withMetricHelp("Number of total jobs")

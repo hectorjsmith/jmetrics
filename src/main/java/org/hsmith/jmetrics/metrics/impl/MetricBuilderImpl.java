@@ -42,13 +42,7 @@ public final class MetricBuilderImpl implements MetricBuilder {
 
     @Override
     public MetricBuilder withMetricSample(final DoubleSupplier sampleValueFunction) {
-        this.metricSampleList.add(
-                new MetricSampleImpl(
-                        "",
-                        "",
-                        sampleValueFunction
-                )
-        );
+        this.withMetricSample("", "", sampleValueFunction);
         return this;
     }
 

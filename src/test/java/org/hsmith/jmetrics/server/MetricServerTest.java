@@ -40,5 +40,13 @@ class MetricServerTest {
         assertTrue(content.length() > 50);
 
         System.out.println("Content length: " + content.length());
+        System.out.println("Content lines:  " + content.split("\r\n|\r|\n").length);
+
+//        Uncomment for manual testing
+//        try {
+//            Thread.sleep(10000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
     }
 }

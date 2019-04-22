@@ -38,10 +38,17 @@ public abstract class BaseCollector extends io.prometheus.client.Collector imple
         List<MetricFamilySamples.Sample> sampleList = new ArrayList<>();
 
         for (MetricSample sample : metric.getMetricSamples()) {
+            List<String> sampleLabelNames = new ArrayList<>();
+            List<String> sampleLabelValues = new ArrayList<>();
+            if (!sample.getMetricLabelName().isEmpty() && !sample.getMetricLabelValue().isEmpty()) {
+                sampleLabelNames.add(sample.getMetricLabelName());
+                sampleLabelValues.add(sample.getMetricLabelValue());
+            }
+
             sampleList.add(new MetricFamilySamples.Sample(
                     metric.getMetricName(),
-                    Collections.singletonList(sample.getMetricLabelName()),
-                    Collections.singletonList(sample.getMetricLabelValue()),
+                    sampleLabelNames,
+                    sampleLabelValues,
                     sample.getSampleValue()
             ));
         }
