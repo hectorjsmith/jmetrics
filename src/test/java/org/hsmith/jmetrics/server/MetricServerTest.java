@@ -20,7 +20,6 @@ class MetricServerTest {
         TestUtil.setupLoggerForTests();
     }
 
-
     @Test
     void startServerTest() throws IOException {
         MetricServerConfig config = mock(MetricServerConfig.class);

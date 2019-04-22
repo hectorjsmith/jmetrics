@@ -14,6 +14,10 @@ public final class MetricServerConfigBuilderImpl implements MetricServerConfigBu
     private boolean collectJettyMetrics;
     private boolean collectQueuedThreadPoolMetrics;
 
+    public MetricServerConfigBuilderImpl() {
+        this.collectJvmMetrics = true;
+    }
+
     @Override
     public MetricServerConfigBuilder withServerHttpPort(final int serverHttpPort) {
         this.serverHttpPort = serverHttpPort;
@@ -33,26 +37,41 @@ public final class MetricServerConfigBuilderImpl implements MetricServerConfigBu
     }
 
     @Override
-    public MetricServerConfigBuilder withServerIdleTimout(final int serverIdleTimout) {
+    public MetricServerConfigBuilder withServerIdleTimeout(final int serverIdleTimeout) {
         this.serverIdleTimeout = serverIdleTimeout;
         return this;
     }
 
     @Override
     public MetricServerConfigBuilder collectJvmMetrics() {
-        this.collectJvmMetrics = true;
+        return collectJettyMetrics(true);
+    }
+
+    @Override
+    public MetricServerConfigBuilder collectJvmMetrics(final boolean value) {
+        this.collectJvmMetrics = value;
         return this;
     }
 
     @Override
     public MetricServerConfigBuilder collectJettyMetrics() {
-        this.collectJettyMetrics = true;
+        return this.collectJettyMetrics(true);
+    }
+
+    @Override
+    public MetricServerConfigBuilder collectJettyMetrics(final boolean value) {
+        this.collectJettyMetrics = value;
         return this;
     }
 
     @Override
     public MetricServerConfigBuilder collectQueuedThreadPoolMetrics() {
-        this.collectQueuedThreadPoolMetrics = true;
+        return this.collectQueuedThreadPoolMetrics(true);
+    }
+
+    @Override
+    public MetricServerConfigBuilder collectQueuedThreadPoolMetrics(final boolean value) {
+        this.collectQueuedThreadPoolMetrics = value;
         return this;
     }
 
