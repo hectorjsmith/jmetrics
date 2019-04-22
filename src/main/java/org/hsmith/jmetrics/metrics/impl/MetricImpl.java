@@ -7,23 +7,39 @@ import org.hsmith.jmetrics.metrics.MetricType;
 import java.util.List;
 
 public final class MetricImpl implements Metric {
+    private final MetricType metricType;
+    private final String metricName;
+    private final String metricHelp;
+    private final List<MetricSample> metricSamples;
+
+    MetricImpl(final MetricType metricType,
+               final String metricName,
+               final String metricHelp,
+               final List<MetricSample> metricSamples) {
+
+        this.metricType = metricType;
+        this.metricName = metricName;
+        this.metricHelp = metricHelp;
+        this.metricSamples = metricSamples;
+    }
+
     @Override
     public MetricType getMetricType() {
-        return null;
+        return this.metricType;
     }
 
     @Override
     public String getMetricName() {
-        return null;
+        return this.metricName;
     }
 
     @Override
     public String getMetricHelp() {
-        return null;
+        return this.metricHelp;
     }
 
     @Override
     public List<MetricSample> getMetricSamples() {
-        return null;
+        return this.metricSamples;
     }
 }

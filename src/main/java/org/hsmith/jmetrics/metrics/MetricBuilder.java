@@ -12,8 +12,6 @@ public interface MetricBuilder extends Builder<Metric> {
 
     MetricBuilder withMetricHelp(String metricHelp);
 
-    MetricBuilder withSampleValueFunction(DoubleSupplier sampleValueFunction);
-
     MetricBuilder withMetricSample(DoubleSupplier sampleValueFunction);
 
     MetricBuilder withMetricSample(String sampleLabelName,
