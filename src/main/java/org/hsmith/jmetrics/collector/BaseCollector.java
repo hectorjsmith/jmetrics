@@ -4,8 +4,8 @@ import org.hsmith.jmetrics.metrics.Metric;
 import org.hsmith.jmetrics.metrics.MetricSample;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+
 
 public abstract class BaseCollector extends io.prometheus.client.Collector implements Collector {
 

@@ -6,6 +6,7 @@ import org.hsmith.jmetrics.metrics.MetricType;
 
 
 public final class StatisticsHandlerCollector extends BaseCollector {
+    private final double timeToSecondsMultiplier = 1000.0;
     private final StatisticsHandler statisticsHandler;
     private final MetricBuilderFactory metricBuilderFactory;
 
@@ -39,13 +40,13 @@ public final class StatisticsHandlerCollector extends BaseCollector {
                 .withMetricType(MetricType.GAUGE)
                 .withMetricName("jetty_request_time_max_seconds")
                 .withMetricHelp("Maximum time spent handling requests")
-                .withMetricSample(() -> statisticsHandler.getRequestTimeMax() / 1000.0)
+                .withMetricSample(() -> statisticsHandler.getRequestTimeMax() / timeToSecondsMultiplier)
                 .build());
         super.addMetric(metricBuilderFactory.newInstance()
                 .withMetricType(MetricType.COUNTER)
                 .withMetricName("jetty_request_time_seconds_total")
                 .withMetricHelp("Total time spent in all request handling")
-                .withMetricSample(() -> statisticsHandler.getRequestTimeTotal() / 1000.0)
+                .withMetricSample(() -> statisticsHandler.getRequestTimeTotal() / timeToSecondsMultiplier)
                 .build());
         super.addMetric(metricBuilderFactory.newInstance()
                 .withMetricType(MetricType.COUNTER)
@@ -75,7 +76,7 @@ public final class StatisticsHandlerCollector extends BaseCollector {
                 .withMetricType(MetricType.COUNTER)
                 .withMetricName("jetty_dispatched_time_seconds_total")
                 .withMetricHelp("Total time spent in dispatch handling")
-                .withMetricSample(() -> statisticsHandler.getDispatchedTimeTotal() / 1000.0)
+                .withMetricSample(() -> statisticsHandler.getDispatchedTimeTotal() / timeToSecondsMultiplier)
                 .build());
         super.addMetric(metricBuilderFactory.newInstance()
                 .withMetricType(MetricType.COUNTER)
@@ -111,7 +112,7 @@ public final class StatisticsHandlerCollector extends BaseCollector {
                 .withMetricType(MetricType.GAUGE)
                 .withMetricName("jetty_stats_seconds")
                 .withMetricHelp("Time in seconds stats have been collected for")
-                .withMetricSample(() -> statisticsHandler.getStatsOnMs() / 1000.0)
+                .withMetricSample(() -> statisticsHandler.getStatsOnMs() / timeToSecondsMultiplier)
                 .build());
         super.addMetric(metricBuilderFactory.newInstance()
                 .withMetricType(MetricType.COUNTER)
