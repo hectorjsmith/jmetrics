@@ -15,7 +15,12 @@ public final class MetricServerConfigBuilderImpl implements MetricServerConfigBu
     private boolean collectQueuedThreadPoolMetrics;
 
     public MetricServerConfigBuilderImpl() {
-        this.collectJvmMetrics = true;
+        this.serverMaxThreads = MetricServerConfigDefaults.SERVER_MAX_THREADS;
+        this.serverMinThreads = MetricServerConfigDefaults.SERVER_MIN_THREADS;
+        this.serverIdleTimeout = MetricServerConfigDefaults.SERVER_IDLE_TIMEOUT;
+        this.collectJvmMetrics = MetricServerConfigDefaults.COLLECT_JVM_METRICS;
+        this.collectJettyMetrics = MetricServerConfigDefaults.COLLECT_JETTY_METRICS;
+        this.collectQueuedThreadPoolMetrics = MetricServerConfigDefaults.COLLECT_QUEUED_THREADPOOL_METRICS;
     }
 
     @Override
