@@ -8,4 +8,10 @@ public interface MetricServerConfig {
     int getServerMinThreads();
 
     int getServerIdleTimout();
+
+    boolean collectJvmMetrics();
+
+    boolean collectJettyMetrics();
+
+    boolean collectQueuedThreadPoolMetrics();
 }

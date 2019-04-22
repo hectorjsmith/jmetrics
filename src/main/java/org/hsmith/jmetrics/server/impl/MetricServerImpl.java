@@ -57,8 +57,14 @@ public final class MetricServerImpl implements MetricServer {
         MetricBuilderFactory metricBuilderFactory = new MetricBuilderFactoryImpl();
 
         // Default JVM metrics
-        DefaultExports.initialize();
-        new QueuedThreadPoolCollector(queuedThreadPool, metricBuilderFactory).register();
-        new JettyStatisticsCollector(jettyStatistics, metricBuilderFactory).register();
+        if (config.collectJvmMetrics()) {
+            DefaultExports.initialize();
+        }
+        if (config.collectJettyMetrics()) {
+            new QueuedThreadPoolCollector(queuedThreadPool, metricBuilderFactory).register();
+        }
+        if (config.collectQueuedThreadPoolMetrics()) {
+            new JettyStatisticsCollector(jettyStatistics, metricBuilderFactory).register();
+        }
     }
 }

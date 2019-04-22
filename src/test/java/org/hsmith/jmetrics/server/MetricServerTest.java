@@ -28,6 +28,9 @@ class MetricServerTest {
         when(config.getServerMaxThreads()).thenReturn(200);
         when(config.getServerMinThreads()).thenReturn(5);
         when(config.getServerIdleTimout()).thenReturn(60_000);
+        when(config.collectJvmMetrics()).thenReturn(true);
+        when(config.collectJettyMetrics()).thenReturn(true);
+        when(config.collectQueuedThreadPoolMetrics()).thenReturn(true);
 
         MetricServer metricServer = new MetricServerBuilderImpl()
                 .withServerConfig(config)

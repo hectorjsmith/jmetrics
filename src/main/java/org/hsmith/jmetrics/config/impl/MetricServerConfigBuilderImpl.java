@@ -10,6 +10,9 @@ public final class MetricServerConfigBuilderImpl implements MetricServerConfigBu
     private int serverMaxThreads;
     private int serverMinThreads;
     private int serverIdleTimeout;
+    private boolean collectJvmMetrics;
+    private boolean collectJettyMetrics;
+    private boolean collectQueuedThreadPoolMetrics;
 
     @Override
     public MetricServerConfigBuilder withServerHttpPort(final int serverHttpPort) {
@@ -36,12 +39,33 @@ public final class MetricServerConfigBuilderImpl implements MetricServerConfigBu
     }
 
     @Override
+    public MetricServerConfigBuilder collectJvmMetrics() {
+        this.collectJvmMetrics = true;
+        return this;
+    }
+
+    @Override
+    public MetricServerConfigBuilder collectJettyMetrics() {
+        this.collectJettyMetrics = true;
+        return this;
+    }
+
+    @Override
+    public MetricServerConfigBuilder collectQueuedThreadPoolMetrics() {
+        this.collectQueuedThreadPoolMetrics = true;
+        return this;
+    }
+
+    @Override
     public MetricServerConfig build() {
         return new MetricServerConfigImpl(
                 this.serverHttpPort,
                 this.serverMaxThreads,
                 this.serverMinThreads,
-                this.serverIdleTimeout
+                this.serverIdleTimeout,
+                this.collectJvmMetrics,
+                this.collectJettyMetrics,
+                this.collectQueuedThreadPoolMetrics
         );
     }
 }

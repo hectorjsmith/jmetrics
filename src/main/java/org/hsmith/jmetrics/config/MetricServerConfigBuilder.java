@@ -11,4 +11,10 @@ public interface MetricServerConfigBuilder extends Builder<MetricServerConfig> {
     MetricServerConfigBuilder withServerMinThreads(int serverMinThreads);
 
     MetricServerConfigBuilder withServerIdleTimout(int serverIdleTimout);
+
+    MetricServerConfigBuilder collectJvmMetrics();
+
+    MetricServerConfigBuilder collectJettyMetrics();
+
+    MetricServerConfigBuilder collectQueuedThreadPoolMetrics();
 }
