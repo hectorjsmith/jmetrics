@@ -13,12 +13,16 @@ public abstract class BaseCollector extends io.prometheus.client.Collector imple
 
     protected BaseCollector() {
         this.metricFamilySamples = new ArrayList<>();
-        this.register();
     }
 
     @Override
     public final List<MetricFamilySamples> collect() {
         return this.metricFamilySamples;
+    }
+
+    @Override
+    public final void initialize() {
+        this.register();
     }
 
     protected final void addMetric(final Metric metric) {

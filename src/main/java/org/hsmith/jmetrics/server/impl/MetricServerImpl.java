@@ -42,7 +42,7 @@ public final class MetricServerImpl implements MetricServer {
         metricsServer.setHandler(jettyStatistics);
         this.httpServer = new HTTPServer(config.getServerHttpPort());
 
-        logger.info("Metrics server started on port " + config.getServerHttpPort());
+        logger.info(String.format("Metrics server started on port: %d", config.getServerHttpPort()));
     }
 
     @Override
@@ -61,10 +61,10 @@ public final class MetricServerImpl implements MetricServer {
             DefaultExports.initialize();
         }
         if (config.collectJettyMetrics()) {
-            new QueuedThreadPoolCollector(queuedThreadPool, metricBuilderFactory).register();
+            new QueuedThreadPoolCollector(queuedThreadPool, metricBuilderFactory).initialize();
         }
         if (config.collectQueuedThreadPoolMetrics()) {
-            new JettyStatisticsCollector(jettyStatistics, metricBuilderFactory).register();
+            new JettyStatisticsCollector(jettyStatistics, metricBuilderFactory).initialize();
         }
     }
 }
