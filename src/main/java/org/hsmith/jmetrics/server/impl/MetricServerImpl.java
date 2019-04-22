@@ -8,7 +8,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.StatisticsHandler;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.hsmith.jmetrics.collector.QueuedThreadPoolCollector;
-import org.hsmith.jmetrics.collector.StatisticsHandlerCollector;
+import org.hsmith.jmetrics.collector.JettyStatisticsCollector;
 import org.hsmith.jmetrics.config.MetricServerConfig;
 import org.hsmith.jmetrics.metrics.MetricBuilderFactory;
 import org.hsmith.jmetrics.metrics.impl.MetricBuilderFactoryImpl;
@@ -29,17 +29,17 @@ public final class MetricServerImpl implements MetricServer {
     @Override
     public void startServer() throws IOException {
         // Setup base metrics
-        StatisticsHandler statisticsHandler = new StatisticsHandler();
+        StatisticsHandler jettyStatistics = new StatisticsHandler();
         QueuedThreadPool queuedThreadPool = new QueuedThreadPool(
                 config.getServerMaxThreads(),
                 config.getServerMinThreads(),
                 config.getServerIdleTimout());
 
-        setupMetricCollectors(queuedThreadPool, statisticsHandler);
+        setupMetricCollectors(queuedThreadPool, jettyStatistics);
 
         // Setup server
         Server metricsServer = new Server(queuedThreadPool);
-        metricsServer.setHandler(statisticsHandler);
+        metricsServer.setHandler(jettyStatistics);
         this.httpServer = new HTTPServer(config.getServerHttpPort());
 
         logger.info("Metrics server started on port " + config.getServerHttpPort());
@@ -52,13 +52,13 @@ public final class MetricServerImpl implements MetricServer {
     }
 
     private void setupMetricCollectors(final QueuedThreadPool queuedThreadPool,
-                                       final StatisticsHandler statisticsHandler) {
+                                       final StatisticsHandler jettyStatistics) {
 
         MetricBuilderFactory metricBuilderFactory = new MetricBuilderFactoryImpl();
 
         // Default JVM metrics
         DefaultExports.initialize();
         new QueuedThreadPoolCollector(queuedThreadPool, metricBuilderFactory).register();
-        new StatisticsHandlerCollector(statisticsHandler, metricBuilderFactory).register();
+        new JettyStatisticsCollector(jettyStatistics, metricBuilderFactory).register();
     }
 }
