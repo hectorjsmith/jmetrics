@@ -1,6 +1,7 @@
 package org.hsmith.jmetrics.collector;
 
 import org.hsmith.jmetrics.metrics.Metric;
+import org.hsmith.jmetrics.metrics.MetricBuilderFactory;
 import org.hsmith.jmetrics.metrics.MetricSample;
 
 import java.util.ArrayList;
@@ -18,6 +19,14 @@ public abstract class BaseCollector extends io.prometheus.client.Collector imple
     public final List<MetricFamilySamples> collect() {
         return this.metricFamilySamples;
     }
+
+    @Override
+    public final void initialize(final MetricBuilderFactory metricBuilderFactory) {
+        buildMetrics(metricBuilderFactory);
+        this.register();
+    }
+
+    protected abstract void buildMetrics(MetricBuilderFactory metricBuilderFactory);
 
     protected final void addMetric(final Metric metric) {
         this.metricFamilySamples.add(metricToMetricFamilySample(metric));

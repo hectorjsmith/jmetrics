@@ -14,17 +14,12 @@ public final class JettyStatisticsCollector extends BaseCollector {
     }
 
     @Override
-    public void initialize(final MetricBuilderFactory metricBuilderFactory) {
-        buildMetrics(metricBuilderFactory);
-        super.register();
-    }
-
-    @Override
     public String getCollectorName() {
         return this.getClass().getSimpleName();
     }
 
-    private void buildMetrics(final MetricBuilderFactory metricBuilderFactory) {
+    @Override
+    protected void buildMetrics(final MetricBuilderFactory metricBuilderFactory) {
         super.addMetric(metricBuilderFactory.newInstance()
                 .withMetricType(MetricType.COUNTER)
                 .withMetricName("jetty_requests_total")

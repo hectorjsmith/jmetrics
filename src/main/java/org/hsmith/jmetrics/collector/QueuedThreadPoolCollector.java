@@ -13,17 +13,12 @@ public final class QueuedThreadPoolCollector extends BaseCollector {
     }
 
     @Override
-    public void initialize(final MetricBuilderFactory metricBuilderFactory) {
-        buildMetrics(metricBuilderFactory);
-        super.register();
-    }
-
-    @Override
     public String getCollectorName() {
         return this.getClass().getSimpleName();
     }
 
-    private void buildMetrics(final MetricBuilderFactory metricBuilderFactory) {
+    @Override
+    protected void buildMetrics(final MetricBuilderFactory metricBuilderFactory) {
         super.addMetric(metricBuilderFactory.newInstance()
                 .withMetricType(MetricType.GAUGE)
                 .withMetricName("jetty_queued_thread_pool_threads")
