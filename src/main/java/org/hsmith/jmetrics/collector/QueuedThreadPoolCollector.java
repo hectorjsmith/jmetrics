@@ -7,16 +7,18 @@ import org.hsmith.jmetrics.metrics.MetricType;
 
 public final class QueuedThreadPoolCollector extends BaseCollector {
     private final QueuedThreadPool queuedThreadPool;
-    private final MetricBuilderFactory metricBuilderFactory;
 
-    public QueuedThreadPoolCollector(final QueuedThreadPool queuedThreadPool,
-                                     final MetricBuilderFactory metricBuilderFactory) {
+    public QueuedThreadPoolCollector(final QueuedThreadPool queuedThreadPool) {
         this.queuedThreadPool = queuedThreadPool;
-        this.metricBuilderFactory = metricBuilderFactory;
-        buildMetrics();
     }
 
-    private void buildMetrics() {
+    @Override
+    public String getCollectorName() {
+        return this.getClass().getSimpleName();
+    }
+
+    @Override
+    protected void buildMetrics(final MetricBuilderFactory metricBuilderFactory) {
         super.addMetric(metricBuilderFactory.newInstance()
                 .withMetricType(MetricType.GAUGE)
                 .withMetricName("jetty_queued_thread_pool_threads")

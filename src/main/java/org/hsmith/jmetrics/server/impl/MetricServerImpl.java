@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.StatisticsHandler;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
+import org.hsmith.jmetrics.collector.Collector;
 import org.hsmith.jmetrics.collector.QueuedThreadPoolCollector;
 import org.hsmith.jmetrics.collector.JettyStatisticsCollector;
 import org.hsmith.jmetrics.config.MetricServerConfig;
@@ -15,15 +16,19 @@ import org.hsmith.jmetrics.metrics.impl.MetricBuilderFactoryImpl;
 import org.hsmith.jmetrics.server.MetricServer;
 
 import java.io.IOException;
+import java.util.Set;
 
 public final class MetricServerImpl implements MetricServer {
     private final Logger logger;
     private final MetricServerConfig config;
+    private final Set<Collector> collectorSet;
     private HTTPServer httpServer;
 
-    MetricServerImpl(final MetricServerConfig config) {
+    MetricServerImpl(final MetricServerConfig config,
+                     final Set<Collector> collectorSet) {
         this.logger = LogManager.getLogger(this.getClass());
         this.config = config;
+        this.collectorSet = collectorSet;
     }
 
     @Override
@@ -58,13 +63,21 @@ public final class MetricServerImpl implements MetricServer {
 
         // Default JVM metrics
         if (config.collectJvmMetrics()) {
+            logger.debug("Initializing JVM metrics");
             DefaultExports.initialize();
         }
         if (config.collectJettyMetrics()) {
-            new QueuedThreadPoolCollector(queuedThreadPool, metricBuilderFactory).initialize();
+            logger.debug("Initializing Jetty metrics");
+            new QueuedThreadPoolCollector(queuedThreadPool).initialize(metricBuilderFactory);
         }
         if (config.collectQueuedThreadPoolMetrics()) {
-            new JettyStatisticsCollector(jettyStatistics, metricBuilderFactory).initialize();
+            logger.debug("Initializing queued thread pool metrics");
+            new JettyStatisticsCollector(jettyStatistics).initialize(metricBuilderFactory);
+        }
+
+        for (Collector collector : collectorSet) {
+            logger.debug("Initializing custom metric: " + collector.getCollectorName());
+            collector.initialize(metricBuilderFactory);
         }
     }
 }

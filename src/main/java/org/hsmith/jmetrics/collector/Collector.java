@@ -1,5 +1,9 @@
 package org.hsmith.jmetrics.collector;
 
+import org.hsmith.jmetrics.metrics.MetricBuilderFactory;
+
 public interface Collector {
-    void initialize();
+    void initialize(MetricBuilderFactory metricBuilderFactory);
+
+    String getCollectorName();
 }
