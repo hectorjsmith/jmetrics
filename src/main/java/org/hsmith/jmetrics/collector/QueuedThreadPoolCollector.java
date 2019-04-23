@@ -20,7 +20,7 @@ public final class QueuedThreadPoolCollector extends BaseCollector {
 
     @Override
     public String getCollectorName() {
-        return this.getClass().getName();
+        return this.getClass().getSimpleName();
     }
 
     private void buildMetrics(final MetricBuilderFactory metricBuilderFactory) {
