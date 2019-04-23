@@ -8,7 +8,6 @@ import java.util.List;
 
 
 public abstract class BaseCollector extends io.prometheus.client.Collector implements Collector {
-
     private final List<MetricFamilySamples> metricFamilySamples;
 
     BaseCollector() {
@@ -18,11 +17,6 @@ public abstract class BaseCollector extends io.prometheus.client.Collector imple
     @Override
     public final List<MetricFamilySamples> collect() {
         return this.metricFamilySamples;
-    }
-
-    @Override
-    public final void initialize() {
-        this.register();
     }
 
     protected final void addMetric(final Metric metric) {

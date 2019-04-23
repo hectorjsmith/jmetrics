@@ -66,10 +66,10 @@ public final class MetricServerImpl implements MetricServer {
             DefaultExports.initialize();
         }
         if (config.collectJettyMetrics()) {
-            new QueuedThreadPoolCollector(queuedThreadPool, metricBuilderFactory).initialize();
+            new QueuedThreadPoolCollector(queuedThreadPool).initialize(metricBuilderFactory);
         }
         if (config.collectQueuedThreadPoolMetrics()) {
-            new JettyStatisticsCollector(jettyStatistics, metricBuilderFactory).initialize();
+            new JettyStatisticsCollector(jettyStatistics).initialize(metricBuilderFactory);
         }
     }
 }

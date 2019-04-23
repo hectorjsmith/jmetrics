@@ -8,16 +8,18 @@ import org.hsmith.jmetrics.metrics.MetricType;
 public final class JettyStatisticsCollector extends BaseCollector {
     private final double timeToSecondsMultiplier = 1000.0;
     private final StatisticsHandler jettyStatistics;
-    private final MetricBuilderFactory metricBuilderFactory;
 
-    public JettyStatisticsCollector(final StatisticsHandler jettyStatistics,
-                                    final MetricBuilderFactory metricBuilderFactory) {
+    public JettyStatisticsCollector(final StatisticsHandler jettyStatistics) {
         this.jettyStatistics = jettyStatistics;
-        this.metricBuilderFactory = metricBuilderFactory;
-        buildMetrics();
     }
 
-    private void buildMetrics() {
+    @Override
+    public void initialize(final MetricBuilderFactory metricBuilderFactory) {
+        buildMetrics(metricBuilderFactory);
+        super.register();
+    }
+
+    private void buildMetrics(final MetricBuilderFactory metricBuilderFactory) {
         super.addMetric(metricBuilderFactory.newInstance()
                 .withMetricType(MetricType.COUNTER)
                 .withMetricName("jetty_requests_total")
