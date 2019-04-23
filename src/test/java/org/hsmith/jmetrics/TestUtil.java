@@ -1,5 +1,7 @@
 package org.hsmith.jmetrics;
 
+import io.prometheus.client.CollectorRegistry;
+import io.prometheus.client.hotspot.DefaultExports;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.PropertyConfigurator;
 
@@ -8,6 +10,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Properties;
@@ -69,5 +72,16 @@ public class TestUtil {
                 connection.disconnect();
             }
         }
+    }
+
+    public static void resetCollectors() throws NoSuchFieldException, IllegalAccessException {
+        // Clearing all collectors
+        CollectorRegistry.defaultRegistry.clear();
+
+        // Using reflection to set the initialized flag on the DefaultExports back to false
+        // Otherwise the default exports never get re-enabled
+        Field field = DefaultExports.class.getDeclaredField("initialized");
+        field.setAccessible(true);
+        field.set(null, false);
     }
 }

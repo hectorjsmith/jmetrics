@@ -10,7 +10,7 @@ import java.util.List;
 public abstract class BaseCollector extends io.prometheus.client.Collector implements Collector {
     private final List<MetricFamilySamples> metricFamilySamples;
 
-    BaseCollector() {
+    protected BaseCollector() {
         this.metricFamilySamples = new ArrayList<>();
     }
 
