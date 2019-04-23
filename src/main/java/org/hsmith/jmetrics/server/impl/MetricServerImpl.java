@@ -63,13 +63,21 @@ public final class MetricServerImpl implements MetricServer {
 
         // Default JVM metrics
         if (config.collectJvmMetrics()) {
+            logger.debug("Initializing JVM metrics");
             DefaultExports.initialize();
         }
         if (config.collectJettyMetrics()) {
+            logger.debug("Initializing Jetty metrics");
             new QueuedThreadPoolCollector(queuedThreadPool).initialize(metricBuilderFactory);
         }
         if (config.collectQueuedThreadPoolMetrics()) {
+            logger.debug("Initializing queued thread pool metrics");
             new JettyStatisticsCollector(jettyStatistics).initialize(metricBuilderFactory);
+        }
+
+        for (Collector collector : collectorSet) {
+            logger.debug("Initializing custom metric: " + collector.getCollectorName());
+            collector.initialize(metricBuilderFactory);
         }
     }
 }

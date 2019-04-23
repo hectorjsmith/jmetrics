@@ -19,6 +19,11 @@ public final class JettyStatisticsCollector extends BaseCollector {
         super.register();
     }
 
+    @Override
+    public String getCollectorName() {
+        return this.getClass().getName();
+    }
+
     private void buildMetrics(final MetricBuilderFactory metricBuilderFactory) {
         super.addMetric(metricBuilderFactory.newInstance()
                 .withMetricType(MetricType.COUNTER)
