@@ -33,12 +33,13 @@ public class MetricServerTest {
     @Test
     void startServerTestWithCustomMetrics() throws IOException {
         int port = 9980;
-        int expectedContentLines = 143;
-        int expectedContentLength = 7250;
-        int expectedContentLengthRange = 100;
+        int expectedContentLines = 19;
+        int expectedContentLength = 560;
+        int expectedContentLengthRange = 20;
 
         MetricServerConfig config = new MetricServerConfigBuilderImpl()
                 .withServerHttpPort(port)
+                .collectJvmMetrics(false)
                 .build();
 
         MetricServer metricServer = new MetricServerBuilderImpl()
