@@ -42,8 +42,7 @@ public class MetricServerTest {
                 .collectJvmMetrics(false)
                 .build();
 
-        MetricServer metricServer = new MetricServerBuilderImpl()
-                .withServerConfig(config)
+        MetricServer metricServer = new MetricServerBuilderImpl(config)
                 .withCollector(new NewCustomCollector())
                 .build();
 
