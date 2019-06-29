@@ -1,7 +1,5 @@
 package org.hsmith.jmetrics.server;
 
-import io.prometheus.client.CollectorRegistry;
-import io.prometheus.client.hotspot.DefaultExports;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.hsmith.jmetrics.TestUtil;
@@ -13,7 +11,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 
 import static junit.framework.TestCase.*;
 
@@ -67,8 +64,7 @@ class MetricServerTest {
                                         final int expectedContentLength,
                                         final int expectedContentLengthRange) throws IOException {
 
-        MetricServer metricServer = new MetricServerBuilderImpl()
-                .withServerConfig(config)
+        MetricServer metricServer = new MetricServerBuilderImpl(config)
                 .build();
 
         metricServer.startServer();

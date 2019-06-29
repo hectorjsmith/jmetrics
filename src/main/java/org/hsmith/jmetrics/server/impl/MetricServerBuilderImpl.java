@@ -14,14 +14,9 @@ public final class MetricServerBuilderImpl implements MetricServerBuilder {
     private MetricServerConfig config;
     private Set<Collector> collectorSet;
 
-    public MetricServerBuilderImpl() {
+    public MetricServerBuilderImpl(final MetricServerConfig config) {
         this.collectorSet = new HashSet<>();
-    }
-
-    @Override
-    public MetricServerBuilder withServerConfig(final MetricServerConfig config) {
         this.config = config;
-        return this;
     }
 
     @Override
