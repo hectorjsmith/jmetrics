@@ -22,15 +22,11 @@ public abstract class BaseCollector extends io.prometheus.client.Collector imple
 
     @Override
     public final void initialize(final MetricBuilderFactory metricBuilderFactory) {
-        buildMetrics(metricBuilderFactory);
+        metrics.addAll(buildMetrics(metricBuilderFactory));
         this.register();
     }
 
-    protected abstract void buildMetrics(MetricBuilderFactory metricBuilderFactory);
-
-    protected final void addMetric(final Metric metric) {
-        metrics.add(metric);
-    }
+    protected abstract List<Metric> buildMetrics(MetricBuilderFactory metricBuilderFactory);
 
     private MetricFamilySamples metricToMetricFamilySample(final Metric metric) {
         return new MetricFamilySamples(

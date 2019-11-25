@@ -2,7 +2,7 @@ package org.hsmith.jmetrics.config.impl;
 
 import org.hsmith.jmetrics.config.MetricServerConfig;
 
-public final class MetricServerConfigImpl implements MetricServerConfig {
+final class MetricServerConfigImpl implements MetricServerConfig {
     private final int serverHttpPort;
     private final int serverMaxThreads;
     private final int serverMinThreads;

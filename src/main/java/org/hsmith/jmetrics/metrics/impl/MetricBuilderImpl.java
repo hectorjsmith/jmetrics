@@ -13,7 +13,7 @@ import java.util.function.DoubleSupplier;
 
 // CHECKSTYLE-OFF: HiddenField - It makes sense to use the same variable name in builder methods
 
-public final class MetricBuilderImpl extends BuilderBase implements MetricBuilder {
+final class MetricBuilderImpl extends BuilderBase implements MetricBuilder {
     private MetricType metricType;
     private String metricName;
     private String metricHelp;

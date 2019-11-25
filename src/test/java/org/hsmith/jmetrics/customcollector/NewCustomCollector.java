@@ -1,8 +1,12 @@
 package org.hsmith.jmetrics.customcollector;
 
 import org.hsmith.jmetrics.collector.BaseCollector;
+import org.hsmith.jmetrics.metrics.Metric;
 import org.hsmith.jmetrics.metrics.MetricBuilderFactory;
 import org.hsmith.jmetrics.metrics.MetricType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class NewCustomCollector extends BaseCollector {
     @Override
@@ -11,26 +15,27 @@ public class NewCustomCollector extends BaseCollector {
     }
 
     @Override
-    protected void buildMetrics(final MetricBuilderFactory metricBuilderFactory) {
-        super.addMetric(metricBuilderFactory.newInstance()
+    protected List<Metric> buildMetrics(final MetricBuilderFactory metricBuilderFactory) {
+        List<Metric> metrics = new ArrayList<>();
+        metrics.add(metricBuilderFactory.newInstance()
                 .withMetricType(MetricType.COUNTER)
                 .withMetricName("test_metric_a")
                 .withMetricHelp("Test metric A")
                 .withMetricSample(() -> 100.0)
                 .build());
-        super.addMetric(metricBuilderFactory.newInstance()
+        metrics.add(metricBuilderFactory.newInstance()
                 .withMetricType(MetricType.GAUGE)
                 .withMetricName("test_metric_b")
                 .withMetricHelp("Test metric B")
                 .withMetricSample(() -> 200.0)
                 .build());
-        super.addMetric(metricBuilderFactory.newInstance()
+        metrics.add(metricBuilderFactory.newInstance()
                 .withMetricType(MetricType.HISTOGRAM)
                 .withMetricName("test_metric_c")
                 .withMetricHelp("Test metric C")
                 .withMetricSample(() -> 300.0)
                 .build());
-        super.addMetric(metricBuilderFactory.newInstance()
+        metrics.add(metricBuilderFactory.newInstance()
                 .withMetricType(MetricType.SUMMARY)
                 .withMetricName("test_metric_d")
                 .withMetricHelp("Test metric D")
@@ -38,7 +43,7 @@ public class NewCustomCollector extends BaseCollector {
                 .build());
 
         // With labels
-        super.addMetric(metricBuilderFactory.newInstance()
+        metrics.add(metricBuilderFactory.newInstance()
                 .withMetricType(MetricType.COUNTER)
                 .withMetricName("test_metric_e")
                 .withMetricHelp("Test metric E")
@@ -48,5 +53,6 @@ public class NewCustomCollector extends BaseCollector {
                 .withMetricSample("code", "2x", () -> 2_000.0)
                 .withMetricSample("code", "3x", () -> 3_000.0)
                 .build());
+        return metrics;
     }
 }
