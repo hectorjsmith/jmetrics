@@ -4,7 +4,7 @@ import org.hsmith.jmetrics.metrics.MetricSample;
 
 import java.util.function.DoubleSupplier;
 
-public final class MetricSampleImpl implements MetricSample {
+final class MetricSampleImpl implements MetricSample {
     private final String metricLabelName;
     private final String metricLabelValue;
     private final DoubleSupplier sampleValueFunction;

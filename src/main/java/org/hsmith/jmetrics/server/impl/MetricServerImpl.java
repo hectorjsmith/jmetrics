@@ -18,7 +18,7 @@ import org.hsmith.jmetrics.server.MetricServer;
 import java.io.IOException;
 import java.util.Set;
 
-public final class MetricServerImpl implements MetricServer {
+final class MetricServerImpl implements MetricServer {
     private final Logger logger;
     private final MetricServerConfig config;
     private final Set<Collector> collectorSet;
