@@ -6,34 +6,27 @@ import org.hsmith.jmetrics.metrics.MetricSample;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public abstract class BaseCollector extends io.prometheus.client.Collector implements Collector {
-    private final List<MetricFamilySamples> metricFamilySamples;
+    private final List<Metric> metrics = new ArrayList<>();
 
     protected BaseCollector() {
-        this.metricFamilySamples = new ArrayList<>();
     }
 
     @Override
     public final List<MetricFamilySamples> collect() {
-        return this.metricFamilySamples;
+        return metrics.stream().map(this::metricToMetricFamilySample).collect(Collectors.toList());
     }
 
     @Override
     public final void initialize(final MetricBuilderFactory metricBuilderFactory) {
-        List<Metric> metrics = buildMetrics(metricBuilderFactory);
-        registerMetrics(metrics);
+        metrics.addAll(buildMetrics(metricBuilderFactory));
         this.register();
     }
 
     protected abstract List<Metric> buildMetrics(MetricBuilderFactory metricBuilderFactory);
-
-    private void registerMetrics(final List<Metric> metrics) {
-        for (Metric metric : metrics) {
-            metricFamilySamples.add(metricToMetricFamilySample(metric));
-        }
-    }
 
     private MetricFamilySamples metricToMetricFamilySample(final Metric metric) {
         return new MetricFamilySamples(
