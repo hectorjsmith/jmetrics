@@ -8,7 +8,7 @@ import org.hsmith.jmetrics.metrics.MetricType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewCustomCollector extends BaseCollector {
+public class MockCollector extends BaseCollector {
     @Override
     public String getCollectorName() {
         return "Random collector";

@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import org.hsmith.jmetrics.TestUtil;
 import org.hsmith.jmetrics.config.MetricServerConfig;
 import org.hsmith.jmetrics.config.impl.MetricServerConfigBuilderImpl;
-import org.hsmith.jmetrics.customcollector.NewCustomCollector;
+import org.hsmith.jmetrics.customcollector.MockCollector;
 import org.hsmith.jmetrics.server.MetricServer;
 import org.hsmith.jmetrics.server.impl.MetricServerBuilderImpl;
 import org.junit.jupiter.api.AfterEach;
@@ -18,6 +18,7 @@ import static junit.framework.TestCase.*;
 import static junit.framework.TestCase.assertTrue;
 
 public class MetricServerTest {
+    public static final String HTTP_LOCALHOST = "http://localhost:";
     private final Logger logger = LogManager.getLogger(this.getClass());
 
     @BeforeAll
@@ -28,6 +29,25 @@ public class MetricServerTest {
     @AfterEach
     void tearDown() throws NoSuchFieldException, IllegalAccessException {
         TestUtil.resetCollectors();
+    }
+
+    @Test
+    void testGivenDefaultConfigWhenStartServerThenMetricsExported() throws IOException {
+        int port = 9980;
+
+        MetricServerConfig config = new MetricServerConfigBuilderImpl()
+                .withServerHttpPort(port)
+                .build();
+
+        MetricServer metricServer = new MetricServerBuilderImpl(config)
+                .build();
+
+        metricServer.startServer();
+
+        String content = TestUtil.getWebpageContent(HTTP_LOCALHOST + port);
+
+        assertNotNull("Content should not be null", content);
+        assertTrue("Content length should be greater than 0", content.length() > 0);
     }
 
     @Test
@@ -43,12 +63,12 @@ public class MetricServerTest {
                 .build();
 
         MetricServer metricServer = new MetricServerBuilderImpl(config)
-                .withCollector(new NewCustomCollector())
+                .withCollector(new MockCollector())
                 .build();
 
         metricServer.startServer();
 
-        String content = TestUtil.getWebpageContent("http://localhost:" + port);
+        String content = TestUtil.getWebpageContent(HTTP_LOCALHOST + port);
         assertNotNull(content);
         assertTrue(content.length() > 0);
 
