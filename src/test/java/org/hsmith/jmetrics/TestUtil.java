@@ -16,6 +16,7 @@ import java.net.URL;
 import java.util.Properties;
 
 public class TestUtil {
+    public static final String HTTP_LOCALHOST = "http://localhost:";
 
     public static void setupLoggerForTests() {
         Properties props = new Properties();
