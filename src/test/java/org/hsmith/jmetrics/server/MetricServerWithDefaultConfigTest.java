@@ -1,4 +1,4 @@
-package org.hsmith.jmetrics.customcollector.server;
+package org.hsmith.jmetrics.server;
 
 import org.hsmith.jmetrics.TestUtil;
 import org.hsmith.jmetrics.config.MetricServerConfig;
