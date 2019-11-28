@@ -11,7 +11,7 @@ import java.util.List;
 public class MockCollector extends BaseCollector {
     @Override
     public String getCollectorName() {
-        return "Random collector";
+        return "Mock collector";
     }
 
     @Override

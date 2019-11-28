@@ -58,10 +58,8 @@ public class MetricServerWithDefaultConfigTest {
     }
 
     private String startDefaultServerAndGetMetrics() throws IOException {
-        int port = 9980;
-
         MetricServerConfig config = new MetricServerConfigBuilderImpl()
-                .withServerHttpPort(port)
+                .withServerHttpPort(TestUtil.TEST_PORT)
                 .build();
 
         MetricServer metricServer = new MetricServerBuilderImpl(config)
@@ -69,7 +67,7 @@ public class MetricServerWithDefaultConfigTest {
 
         metricServer.startServer();
 
-        String content = TestUtil.getWebpageContent(TestUtil.HTTP_LOCALHOST + port);
+        String content = TestUtil.getWebpageContent(TestUtil.HTTP_LOCALHOST + TestUtil.TEST_PORT);
 
         metricServer.stopServer();
         return content;
