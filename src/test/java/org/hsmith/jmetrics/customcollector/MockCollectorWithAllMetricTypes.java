@@ -45,18 +45,3 @@ public class MockCollectorWithAllMetricTypes extends BaseCollector {
         return metrics;
     }
 }
-
-/*
-
-        // With labels
-        metrics.add(metricBuilderFactory.newInstance()
-                .withMetricType(MetricType.COUNTER)
-                .withMetricName("test_metric_e")
-                .withMetricHelp("Test metric E")
-                .withMetricSample("type", "a", () -> 1_000.0)
-                .withMetricSample("type", "b", () -> 1_100.0)
-                .withMetricSample("type", "c", () -> 1_200.0)
-                .withMetricSample("code", "2x", () -> 2_000.0)
-                .withMetricSample("code", "3x", () -> 3_000.0)
-                .build());
- */

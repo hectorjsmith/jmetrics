@@ -15,9 +15,9 @@ import io.prometheus.client.Collector.MetricFamilySamples;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
-import static junit.framework.TestCase.assertNotNull;
-import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.*;
 
 public class MetricServerWithMockCollectorTest {
     private static double mockCounterForTest = 0.0;
@@ -118,6 +118,46 @@ public class MetricServerWithMockCollectorTest {
                         .stream()
                         .anyMatch(m -> m.name.equals(MetricType.UNTYPED.name()) &&
                                 m.type.equals(io.prometheus.client.Collector.Type.UNTYPED)));
+    }
+
+    @Test
+    void testGivenCustomCollectorWithLabelsWhenCollectMetricsThenLabelsAreExportedCorrectly() {
+        MockCollectorWithMetricLabels mockCollector = new MockCollectorWithMetricLabels();
+        mockCollector.initialize(new MetricBuilderFactoryImpl());
+
+        List<MetricFamilySamples> rawMetrics = mockCollector.collect();
+        Optional<MetricFamilySamples> first = rawMetrics.stream().findFirst();
+
+        assertTrue("Collected metrics should have at least one metric", first.isPresent());
+        List<MetricFamilySamples.Sample> samples = first.get().samples;
+
+        assertTrue("Label sample for (code, one) should have been exported",
+                samples.stream().anyMatch(s -> s.value == 1.0
+                        && s.labelNames.get(0).equals("code")
+                        && s.labelValues.get(0).equals("one")));
+        assertTrue("Label sample for (code, two) should have been exported",
+                samples.stream().anyMatch(s -> s.value == 2.0
+                        && s.labelNames.get(0).equals("code")
+                        && s.labelValues.get(0).equals("two")));
+        assertTrue("Label sample for (type, x) should have been exported",
+                samples.stream().anyMatch(s -> s.value == 3.0
+                        && s.labelNames.get(0).equals("type")
+                        && s.labelValues.get(0).equals("x")));
+    }
+
+    @Test
+    void testGivenCustomCollectorWithLabelsWhenStartMetricServerThenMetricsExportedCorrectly() throws IOException {
+        Collector mockCollector = new MockCollectorWithMetricLabels();
+        String content = startServerWithMockCollectorAndGetMetrics(mockCollector);
+
+        String expectedResult = "# HELP COUNTER \r" +
+                "# TYPE COUNTER counter\r" +
+                "COUNTER{code=\"one\",} 1.0\r" +
+                "COUNTER{code=\"two\",} 2.0\r" +
+                "COUNTER{type=\"x\",} 3.0\r";
+
+        assertNotNull("Content should not be null", content);
+        assertEquals("Content should match expected result", expectedResult, content);
     }
 
     private double doubleNumGenerator() {
