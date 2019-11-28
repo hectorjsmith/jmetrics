@@ -4,6 +4,7 @@ import org.hsmith.jmetrics.TestUtil;
 import org.hsmith.jmetrics.collector.Collector;
 import org.hsmith.jmetrics.config.MetricServerConfig;
 import org.hsmith.jmetrics.config.impl.MetricServerConfigBuilderImpl;
+import org.hsmith.jmetrics.metrics.MetricType;
 import org.hsmith.jmetrics.metrics.impl.MetricBuilderFactoryImpl;
 import org.hsmith.jmetrics.server.MetricServer;
 import org.hsmith.jmetrics.server.impl.MetricServerBuilderImpl;
@@ -64,7 +65,7 @@ public class MetricServerWithMockCollectorTest {
     }
 
     @Test
-    void testGivenCusomCollectorWithIncrementingValueWhenMetricsCollectedThenSampleValueChanges() {
+    void testGivenCustomCollectorWithIncrementingValueWhenMetricsCollectedThenSampleValueChanges() {
         String mockName = "mock";
 
         MockCollectorWithSingleMetric mockCollector = new MockCollectorWithSingleMetric(mockName, this::doubleNumGenerator);
@@ -83,6 +84,40 @@ public class MetricServerWithMockCollectorTest {
                         .stream()
                         .anyMatch(m -> m.name.equals(mockName)
                                 && m.samples.stream().anyMatch(s -> s.value == 2.0)));
+    }
+
+    @Test
+    void testGivenCustomCollectorWhenCollectMetricsThenAllMetricTypesAreExportedCorrectly() {
+        MockCollectorWithAllMetricTypes mockCollector = new MockCollectorWithAllMetricTypes();
+        mockCollector.initialize(new MetricBuilderFactoryImpl());
+
+        List<MetricFamilySamples> rawMetrics = mockCollector.collect();
+
+        assertTrue("Raw metrics should include a COUNTER metric",
+                rawMetrics
+                        .stream()
+                        .anyMatch(m -> m.name.equals(MetricType.COUNTER.name()) &&
+                                m.type.equals(io.prometheus.client.Collector.Type.COUNTER)));
+        assertTrue("Raw metrics should include a GAUGE metric",
+                rawMetrics
+                        .stream()
+                        .anyMatch(m -> m.name.equals(MetricType.GAUGE.name()) &&
+                                m.type.equals(io.prometheus.client.Collector.Type.GAUGE)));
+        assertTrue("Raw metrics should include a HISTOGRAM metric",
+                rawMetrics
+                        .stream()
+                        .anyMatch(m -> m.name.equals(MetricType.HISTOGRAM.name()) &&
+                                m.type.equals(io.prometheus.client.Collector.Type.HISTOGRAM)));
+        assertTrue("Raw metrics should include a SUMMARY metric",
+                rawMetrics
+                        .stream()
+                        .anyMatch(m -> m.name.equals(MetricType.SUMMARY.name()) &&
+                                m.type.equals(io.prometheus.client.Collector.Type.SUMMARY)));
+        assertTrue("Raw metrics should include a UNTYPED metric",
+                rawMetrics
+                        .stream()
+                        .anyMatch(m -> m.name.equals(MetricType.UNTYPED.name()) &&
+                                m.type.equals(io.prometheus.client.Collector.Type.UNTYPED)));
     }
 
     private double doubleNumGenerator() {
