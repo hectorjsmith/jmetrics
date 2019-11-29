@@ -19,8 +19,4 @@ public interface MetricServerConfigBuilder extends Builder<MetricServerConfig> {
     MetricServerConfigBuilder collectJettyMetrics();
 
     MetricServerConfigBuilder collectJettyMetrics(boolean value);
-
-    MetricServerConfigBuilder collectQueuedThreadPoolMetrics();
-
-    MetricServerConfigBuilder collectQueuedThreadPoolMetrics(boolean value);
 }

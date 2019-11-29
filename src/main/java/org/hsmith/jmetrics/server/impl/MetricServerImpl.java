@@ -69,12 +69,9 @@ final class MetricServerImpl implements MetricServer {
         if (config.collectJettyMetrics()) {
             logger.debug("Initializing Jetty metrics");
             new QueuedThreadPoolCollector(queuedThreadPool).initialize(metricBuilderFactory);
-        }
-        if (config.collectQueuedThreadPoolMetrics()) {
             logger.debug("Initializing queued thread pool metrics");
             new JettyStatisticsCollector(jettyStatistics).initialize(metricBuilderFactory);
         }
-
         for (Collector collector : collectorSet) {
             logger.debug("Initializing custom metric: " + collector.getCollectorName());
             collector.initialize(metricBuilderFactory);
