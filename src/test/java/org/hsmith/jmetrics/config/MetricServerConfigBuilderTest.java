@@ -64,8 +64,7 @@ public class MetricServerConfigBuilderTest {
             int testMinThreads,
             int testMaxThreads,
             boolean testJvmMetrics,
-            boolean testJettyMetrics,
-            boolean testQueueMetrics) {
+            boolean testJettyMetrics) {
 
         MetricServerConfig config = new MetricServerConfigBuilderImpl()
                 .withServerHttpPort(testPort)
@@ -74,7 +73,6 @@ public class MetricServerConfigBuilderTest {
                 .withServerMaxThreads(testMaxThreads)
                 .collectJvmMetrics(testJvmMetrics)
                 .collectJettyMetrics(testJettyMetrics)
-                .collectQueuedThreadPoolMetrics(testQueueMetrics)
                 .build();
 
         assertEquals("Port in config should match value set in builder",
@@ -89,19 +87,17 @@ public class MetricServerConfigBuilderTest {
                 testJvmMetrics, config.collectJvmMetrics());
         assertEquals("Collect Jetty metrics option in config should match value set in builder",
                 testJettyMetrics, config.collectJettyMetrics());
-        assertEquals("Collect Queue metrics option in config should match value set in builder",
-                testQueueMetrics, config.collectQueuedThreadPoolMetrics());
     }
 
     private static Stream<Arguments> providerForConfigOptions() {
         return Stream.of(
-                Arguments.of(1199, 1199, 10, 20, true, true, true),
-                Arguments.of(9999, 5000, 3, 4, false, false, false),
-                Arguments.of(1111, 8000, 33, 44, false, true, true),
-                Arguments.of(2222, 4444, 22, 55, true, false, true),
-                Arguments.of(3333, 3333, 33, 55, false, false, true),
-                Arguments.of(4444, 2222, 11, 77, false, true, false),
-                Arguments.of(12000, 111, 1, 1000, true, false, false)
+                Arguments.of(1199, 1199, 10, 20, true, true),
+                Arguments.of(9999, 5000, 3, 4, false, false),
+                Arguments.of(1111, 8000, 33, 44, false, true),
+                Arguments.of(2222, 4444, 22, 55, true, false),
+                Arguments.of(3333, 3333, 33, 55, false, false),
+                Arguments.of(4444, 2222, 11, 77, false, true),
+                Arguments.of(12000, 111, 1, 1000, true, false)
         );
     }
 }

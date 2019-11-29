@@ -8,7 +8,6 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.StatisticsHandler;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.hsmith.jmetrics.collector.Collector;
-import org.hsmith.jmetrics.collector.QueuedThreadPoolCollector;
 import org.hsmith.jmetrics.collector.JettyStatisticsCollector;
 import org.hsmith.jmetrics.config.MetricServerConfig;
 import org.hsmith.jmetrics.metrics.MetricBuilderFactory;
@@ -68,13 +67,8 @@ final class MetricServerImpl implements MetricServer {
         }
         if (config.collectJettyMetrics()) {
             logger.debug("Initializing Jetty metrics");
-            new QueuedThreadPoolCollector(queuedThreadPool).initialize(metricBuilderFactory);
+            new JettyStatisticsCollector(jettyStatistics, queuedThreadPool).initialize(metricBuilderFactory);
         }
-        if (config.collectQueuedThreadPoolMetrics()) {
-            logger.debug("Initializing queued thread pool metrics");
-            new JettyStatisticsCollector(jettyStatistics).initialize(metricBuilderFactory);
-        }
-
         for (Collector collector : collectorSet) {
             logger.debug("Initializing custom metric: " + collector.getCollectorName());
             collector.initialize(metricBuilderFactory);

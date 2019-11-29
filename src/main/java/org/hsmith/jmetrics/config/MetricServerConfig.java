@@ -12,6 +12,4 @@ public interface MetricServerConfig {
     boolean collectJvmMetrics();
 
     boolean collectJettyMetrics();
-
-    boolean collectQueuedThreadPoolMetrics();
 }
