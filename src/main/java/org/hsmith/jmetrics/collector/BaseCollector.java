@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+/**
+ * Extend this class to create a custom collector. Override the buildMetrics method to define a list of
+ * metrics to be exported whenever the metrics server is queried.
+ */
 public abstract class BaseCollector extends io.prometheus.client.Collector implements Collector {
     private final List<Metric> metrics = new ArrayList<>();
 
@@ -26,6 +29,15 @@ public abstract class BaseCollector extends io.prometheus.client.Collector imple
         this.register();
     }
 
+    /**
+     * Build a list of metrics to be exported when the metrics server is queried. Make use of the buider factory
+     * to build the metrics to be exported.
+     * @param metricBuilderFactory Factory object to build new instances of metric builders. Use the generated
+     *                             builder to easily setup new metrics.
+     * @return List of metrics to register.
+     * @see org.hsmith.jmetrics.metrics.MetricBuilder
+     * @see org.hsmith.jmetrics.metrics.MetricBuilderFactory
+     */
     protected abstract List<Metric> buildMetrics(MetricBuilderFactory metricBuilderFactory);
 
     private MetricFamilySamples metricToMetricFamilySample(final Metric metric) {

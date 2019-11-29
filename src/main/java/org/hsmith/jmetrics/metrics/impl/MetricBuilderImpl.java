@@ -20,7 +20,7 @@ final class MetricBuilderImpl extends BuilderBase implements MetricBuilder {
     private List<MetricSample> metricSampleList;
 
     MetricBuilderImpl() {
-        this.metricType = MetricType.UNTYPED;
+        this.metricType = MetricType.COUNTER;
         this.metricName = "";
         this.metricHelp = "";
         this.metricSampleList = new ArrayList<>();

@@ -4,7 +4,6 @@ import io.prometheus.client.exporter.HTTPServer;
 import io.prometheus.client.hotspot.DefaultExports;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.StatisticsHandler;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.hsmith.jmetrics.collector.Collector;
@@ -42,9 +41,7 @@ final class MetricServerImpl implements MetricServer {
         setupMetricCollectors(queuedThreadPool, jettyStatistics);
 
         // Setup server
-        Server metricsServer = new Server(queuedThreadPool);
-        metricsServer.setHandler(jettyStatistics);
-        this.httpServer = new HTTPServer(config.getServerHttpPort());
+        httpServer = new HTTPServer(config.getServerHttpPort());
 
         logger.info(String.format("Metrics server started on port: %d", config.getServerHttpPort()));
     }

@@ -113,11 +113,6 @@ public class MetricServerWithMockCollectorTest {
                         .stream()
                         .anyMatch(m -> m.name.equals(MetricType.SUMMARY.name()) &&
                                 m.type.equals(io.prometheus.client.Collector.Type.SUMMARY)));
-        assertTrue("Raw metrics should include a UNTYPED metric",
-                rawMetrics
-                        .stream()
-                        .anyMatch(m -> m.name.equals(MetricType.UNTYPED.name()) &&
-                                m.type.equals(io.prometheus.client.Collector.Type.UNTYPED)));
     }
 
     @Test
