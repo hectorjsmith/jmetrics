@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class JettyStatisticsCollectorTest {
     @Test
     void testGivenJettyCollectorWhenGetNameThenNmeIsCorrect() {
-        Collector collector = new JettyStatisticsCollector(null);
+        Collector collector = new JettyStatisticsCollector(null, null);
         assertEquals(JettyStatisticsCollector.class.getSimpleName(), collector.getCollectorName());
     }
 }

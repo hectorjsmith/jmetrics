@@ -1,6 +1,7 @@
 package org.hsmith.jmetrics.collector;
 
 import org.eclipse.jetty.server.handler.StatisticsHandler;
+import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.hsmith.jmetrics.metrics.Metric;
 import org.hsmith.jmetrics.metrics.MetricBuilderFactory;
 import org.hsmith.jmetrics.metrics.MetricType;
@@ -12,9 +13,12 @@ import java.util.List;
 public final class JettyStatisticsCollector extends BaseCollector {
     private final double timeToSecondsMultiplier = 1000.0;
     private final StatisticsHandler jettyStatistics;
+    private final QueuedThreadPool queuedThreadPool;
 
-    public JettyStatisticsCollector(final StatisticsHandler jettyStatistics) {
+    public JettyStatisticsCollector(final StatisticsHandler jettyStatistics,
+                                    final QueuedThreadPool queuedThreadPool) {
         this.jettyStatistics = jettyStatistics;
+        this.queuedThreadPool = queuedThreadPool;
     }
 
     @Override
@@ -136,6 +140,30 @@ public final class JettyStatisticsCollector extends BaseCollector {
                 .withMetricSample("code", "3xx", jettyStatistics::getResponses3xx)
                 .withMetricSample("code", "4xx", jettyStatistics::getResponses4xx)
                 .withMetricSample("code", "5xx", jettyStatistics::getResponses5xx)
+                .build());
+        metrics.add(metricBuilderFactory.newInstance()
+                .withMetricType(MetricType.GAUGE)
+                .withMetricName("jetty_queued_thread_pool_threads")
+                .withMetricHelp("Number of total threads")
+                .withMetricSample(queuedThreadPool::getThreads)
+                .build());
+        metrics.add(metricBuilderFactory.newInstance()
+                .withMetricType(MetricType.GAUGE)
+                .withMetricName("jetty_queued_thread_pool_utilization")
+                .withMetricHelp("Percentage of threads in use")
+                .withMetricSample(() -> (double) queuedThreadPool.getThreads() / queuedThreadPool.getMaxThreads())
+                .build());
+        metrics.add(metricBuilderFactory.newInstance()
+                .withMetricType(MetricType.GAUGE)
+                .withMetricName("jetty_queued_thread_pool_threads_idle")
+                .withMetricHelp("Number of idle threads")
+                .withMetricSample(queuedThreadPool::getIdleThreads)
+                .build());
+        metrics.add(metricBuilderFactory.newInstance()
+                .withMetricType(MetricType.GAUGE)
+                .withMetricName("jetty_queued_thread_pool_jobs")
+                .withMetricHelp("Number of total jobs")
+                .withMetricSample(queuedThreadPool::getQueueSize)
                 .build());
         return metrics;
     }
