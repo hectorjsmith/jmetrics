@@ -94,6 +94,12 @@ public final class MetricServerConfigBuilderImpl extends BuilderBase implements 
 
     @Override
     public MetricServerConfig build() {
+        if (serverMinThreads > serverMaxThreads) {
+            throw new IllegalArgumentException(
+                    "Invalid server thread configuration. Minimum number higher than maximum number."
+                            + " Min: " + serverMinThreads + "; Max: " + serverMaxThreads);
+        }
+
         return new MetricServerConfigImpl(
                 this.serverHttpPort,
                 this.serverMaxThreads,
