@@ -18,11 +18,26 @@ public interface MetricServerConfigBuilder extends Builder<MetricServerConfig> {
 
     MetricServerConfigBuilder withServerIdleTimeout(int serverIdleTimout);
 
+    /**
+     * Collect JVM metrics. This will export metrics related to the Java JVM this application is running on.
+     */
     MetricServerConfigBuilder collectJvmMetrics();
 
+    /**
+     * Enable/disable collection of JBM metrics.
+     * This will export metrics related the Java JVM this application is running on.
+     */
     MetricServerConfigBuilder collectJvmMetrics(boolean value);
 
+    /**
+     * Collect Jetty metrics.
+     * This will export metrics related to any running Jetty server.
+     */
     MetricServerConfigBuilder collectJettyMetrics();
 
+    /**
+     * Enable/disable collection of Jetty metrics.
+     * This will export metrics related to any running Jetty server.
+     */
     MetricServerConfigBuilder collectJettyMetrics(boolean value);
 }
