@@ -96,8 +96,8 @@ public final class MetricServerConfigBuilderImpl extends BuilderBase implements 
     public MetricServerConfig build() {
         if (serverMinThreads > serverMaxThreads) {
             throw new IllegalArgumentException(
-                    "Invalid server thread configuration. Minimum number higher than maximum number." +
-                    " Min: " + serverMinThreads + "; Max: " + serverMaxThreads);
+                    "Invalid server thread configuration. Minimum number higher than maximum number."
+                            + " Min: " + serverMinThreads + "; Max: " + serverMaxThreads);
         }
 
         return new MetricServerConfigImpl(
