@@ -37,11 +37,6 @@ public class MockCollectorWithAllMetricTypes extends BaseCollector {
                 .withMetricName(MetricType.SUMMARY.name())
                 .withMetricSample(() -> 400.0)
                 .build());
-        metrics.add(metricBuilderFactory.newInstance()
-                .withMetricType(MetricType.UNTYPED)
-                .withMetricName(MetricType.UNTYPED.name())
-                .withMetricSample(() -> 500.0)
-                .build());
         return metrics;
     }
 }
