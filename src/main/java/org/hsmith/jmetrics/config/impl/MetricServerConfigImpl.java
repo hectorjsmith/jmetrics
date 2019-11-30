@@ -2,14 +2,13 @@ package org.hsmith.jmetrics.config.impl;
 
 import org.hsmith.jmetrics.config.MetricServerConfig;
 
-public final class MetricServerConfigImpl implements MetricServerConfig {
+final class MetricServerConfigImpl implements MetricServerConfig {
     private final int serverHttpPort;
     private final int serverMaxThreads;
     private final int serverMinThreads;
     private final int serverIdleTimeout;
     private final boolean collectJvmMetrics;
     private final boolean collectJettyMetrics;
-    private final boolean collectQueuedThreadPoolMetrics;
 
     MetricServerConfigImpl(
             final int serverHttpPort,
@@ -17,8 +16,7 @@ public final class MetricServerConfigImpl implements MetricServerConfig {
             final int serverMinThreads,
             final int serverIdleTimeout,
             final boolean collectJvmMetrics,
-            final boolean collectJettyMetrics,
-            final boolean collectQueuedThreadPoolMetrics) {
+            final boolean collectJettyMetrics) {
 
         this.serverHttpPort = serverHttpPort;
         this.serverMaxThreads = serverMaxThreads;
@@ -26,7 +24,6 @@ public final class MetricServerConfigImpl implements MetricServerConfig {
         this.serverIdleTimeout = serverIdleTimeout;
         this.collectJvmMetrics = collectJvmMetrics;
         this.collectJettyMetrics = collectJettyMetrics;
-        this.collectQueuedThreadPoolMetrics = collectQueuedThreadPoolMetrics;
     }
 
     @Override
@@ -57,10 +54,5 @@ public final class MetricServerConfigImpl implements MetricServerConfig {
     @Override
     public boolean collectJettyMetrics() {
         return this.collectJettyMetrics;
-    }
-
-    @Override
-    public boolean collectQueuedThreadPoolMetrics() {
-        return this.collectQueuedThreadPoolMetrics;
     }
 }

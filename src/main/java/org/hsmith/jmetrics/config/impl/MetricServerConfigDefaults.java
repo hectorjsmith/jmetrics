@@ -9,7 +9,6 @@ interface MetricServerConfigDefaults {
     int SERVER_IDLE_TIMEOUT = 60_000;
     boolean COLLECT_JVM_METRICS = true;
     boolean COLLECT_JETTY_METRICS = false;
-    boolean COLLECT_QUEUED_THREADPOOL_METRICS = false;
 }
 
 // CHECKSTYLE-ON: InterfaceIsType

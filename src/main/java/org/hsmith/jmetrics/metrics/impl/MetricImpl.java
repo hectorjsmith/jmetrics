@@ -6,7 +6,7 @@ import org.hsmith.jmetrics.metrics.MetricType;
 
 import java.util.List;
 
-public final class MetricImpl implements Metric {
+final class MetricImpl implements Metric {
     private final MetricType metricType;
     private final String metricName;
     private final String metricHelp;

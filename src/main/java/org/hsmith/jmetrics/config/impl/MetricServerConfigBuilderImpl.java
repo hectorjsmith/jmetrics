@@ -19,7 +19,6 @@ public final class MetricServerConfigBuilderImpl extends BuilderBase implements 
     private int serverIdleTimeout;
     private boolean collectJvmMetrics;
     private boolean collectJettyMetrics;
-    private boolean collectQueuedThreadPoolMetrics;
 
     public MetricServerConfigBuilderImpl() {
         this.withServerHttpPort(MetricServerConfigDefaults.SERVER_PORT)
@@ -27,8 +26,7 @@ public final class MetricServerConfigBuilderImpl extends BuilderBase implements 
                 .withServerMaxThreads(MetricServerConfigDefaults.SERVER_MAX_THREADS)
                 .withServerIdleTimeout(MetricServerConfigDefaults.SERVER_IDLE_TIMEOUT)
                 .collectJvmMetrics(MetricServerConfigDefaults.COLLECT_JVM_METRICS)
-                .collectJettyMetrics(MetricServerConfigDefaults.COLLECT_JETTY_METRICS)
-                .collectQueuedThreadPoolMetrics(MetricServerConfigDefaults.COLLECT_QUEUED_THREADPOOL_METRICS);
+                .collectJettyMetrics(MetricServerConfigDefaults.COLLECT_JETTY_METRICS);
     }
 
     @Override
@@ -82,26 +80,20 @@ public final class MetricServerConfigBuilderImpl extends BuilderBase implements 
     }
 
     @Override
-    public MetricServerConfigBuilder collectQueuedThreadPoolMetrics() {
-        return this.collectQueuedThreadPoolMetrics(true);
-    }
-
-    @Override
-    public MetricServerConfigBuilder collectQueuedThreadPoolMetrics(final boolean value) {
-        this.collectQueuedThreadPoolMetrics = value;
-        return this;
-    }
-
-    @Override
     public MetricServerConfig build() {
+        if (serverMinThreads > serverMaxThreads) {
+            throw new IllegalArgumentException(
+                    "Invalid server thread configuration. Minimum number higher than maximum number."
+                            + " Min: " + serverMinThreads + "; Max: " + serverMaxThreads);
+        }
+
         return new MetricServerConfigImpl(
                 this.serverHttpPort,
                 this.serverMaxThreads,
                 this.serverMinThreads,
                 this.serverIdleTimeout,
                 this.collectJvmMetrics,
-                this.collectJettyMetrics,
-                this.collectQueuedThreadPoolMetrics
+                this.collectJettyMetrics
         );
     }
 }
