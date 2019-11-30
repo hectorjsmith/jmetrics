@@ -12,20 +12,20 @@ Define custom collectors by extending the `BaseCollector` class.
 Custom collectors need to override the `buildMetrics` method to build the custom collectors.
 
 ```java
-public class SampleCollector extends BaseCollector implements Collector {
+public class MyNewCollector extends BaseCollector implements Collector {
     @Override
     protected void buildMetrics(MetricBuilderFactory metricBuilderFactory) {
         addMetric(metricBuilderFactory.newInstance()
                 .withMetricType(MetricType.COUNTER)
                 .withMetricName("test_metric")
                 .withMetricHelp("Test metric")
-                .withMetricSample(() -> /* TODO */)
+                .withMetricSample(() -> someValueOrFunction)
                 .build());
     }
 
     @Override
     public String getCollectorName() {
-        return "SampleCollector";
+        return "MyNewCollector";
     }
 }
 ```
@@ -41,9 +41,8 @@ Build the configuration object;
 
 ```java
 MetricServerConfig metricConfig = new MetricServerConfigBuilderImpl()
-    .collectQueuedThreadPoolMetrics()
-    .collectJettyMetrics()
     .collectJvmMetrics()
+    .collectJettyMetrics()
     .withServerHttpPort(9000)
     .withServerIdleTimeout(10)
     .withServerMinThreads(1)
@@ -53,11 +52,12 @@ MetricServerConfig metricConfig = new MetricServerConfigBuilderImpl()
 
 ### Start server
 
-Then use the config object to build the server object.
+Then use the config object to build the server object. Also register any other custom collectors you have
+defined when building the server. It is not possible to register them after the server is built.
 
 ```java
 MetricServer server = new MetricServerBuilderImpl(metricConfig)
-    .withCollector()
+    .withCollector(new MyNewCollector())
     .build();
 ```
 
@@ -72,5 +72,5 @@ Once the server is running the collected metrics can be seen by navigating to th
 ```
 # HELP test_metric Test metric
 # TYPE test_metric counter
-test_metric 0.0
+test_metric 113.7
 ```
