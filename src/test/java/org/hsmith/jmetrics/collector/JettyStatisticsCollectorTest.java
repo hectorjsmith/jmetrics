@@ -6,6 +6,7 @@ import org.hsmith.jmetrics.config.MetricServerConfig;
 import org.hsmith.jmetrics.config.impl.MetricServerConfigBuilderImpl;
 import org.hsmith.jmetrics.server.MetricServer;
 import org.hsmith.jmetrics.server.impl.MetricServerBuilderImpl;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -15,6 +16,11 @@ import java.util.regex.Pattern;
 import static org.junit.jupiter.api.Assertions.*;
 
 class JettyStatisticsCollectorTest {
+    @BeforeAll
+    static void loggerSetup() {
+        TestUtil.setupLoggerForTests();
+    }
+
     @Test
     void testGivenJettyCollectorWhenGetNameThenNmeIsCorrect() {
         Collector collector = new JettyStatisticsCollector(null, null);
@@ -27,7 +33,7 @@ class JettyStatisticsCollectorTest {
 
         int requestNumber = 10;
         String metricsBefore = collectMetricsFromServer();
-        startJettyServerAndMakeRequests(requestNumber);
+        startJettyServerAndMakeRequests(metrics, requestNumber);
         String metricsAfter = collectMetricsFromServer();
 
         assertEquals(0.0, getRequestNumberFromMetrics(metricsBefore),
@@ -66,11 +72,14 @@ class JettyStatisticsCollectorTest {
         return Integer.parseInt(requestNumStr);
     }
 
-    private void startJettyServerAndMakeRequests(int requestNumber) throws Exception {
+    private void startJettyServerAndMakeRequests(MetricServer metricServer, int requestNumber) throws Exception {
         int testServerPort = 11994;
         String testServerResponse = "Hello World";
 
-        Javalin app = Javalin.create();
+        Javalin app = Javalin.create(config -> {
+            config.server(metricServer::getJettyServer);
+        });
+
         app.get("/", ctx -> ctx.result(testServerResponse));
         app.start(testServerPort);
 

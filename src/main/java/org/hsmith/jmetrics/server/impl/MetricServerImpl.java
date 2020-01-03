@@ -21,6 +21,7 @@ final class MetricServerImpl implements MetricServer {
     private final Logger logger;
     private final MetricServerConfig config;
     private final Set<Collector> collectorSet;
+    private Server jettyServer;
     private HTTPServer httpServer;
 
     MetricServerImpl(final MetricServerConfig config,
@@ -42,8 +43,8 @@ final class MetricServerImpl implements MetricServer {
         setupMetricCollectors(queuedThreadPool, jettyStatistics);
 
         // Setup server
-        Server metricsServer = new Server(queuedThreadPool);
-        metricsServer.setHandler(jettyStatistics);
+        jettyServer = new Server(queuedThreadPool);
+        jettyServer.setHandler(jettyStatistics);
         httpServer = new HTTPServer(config.getServerHttpPort());
 
         logger.info(String.format("Metrics server started on port: %d", config.getServerHttpPort()));
@@ -53,6 +54,11 @@ final class MetricServerImpl implements MetricServer {
     public void stopServer() {
         logger.info("Stopping metrics server");
         this.httpServer.stop();
+    }
+
+    @Override
+    public Server getJettyServer() {
+        return jettyServer;
     }
 
     private void setupMetricCollectors(final QueuedThreadPool queuedThreadPool,
