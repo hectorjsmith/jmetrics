@@ -1,5 +1,6 @@
 package org.hsmith.jmetrics.config;
 
+import org.eclipse.jetty.server.Server;
 import org.hsmith.jmetrics.general.Builder;
 
 /**
@@ -31,13 +32,18 @@ public interface MetricServerConfigBuilder extends Builder<MetricServerConfig> {
 
     /**
      * Collect Jetty metrics.
-     * This will export metrics related to any running Jetty server.
+     * The metrics server will create a new Jetty server instance to collect metrics from.
      */
     MetricServerConfigBuilder collectJettyMetrics();
 
     /**
      * Enable/disable collection of Jetty metrics.
-     * This will export metrics related to any running Jetty server.
+     * The metrics server will create a new Jetty server instance to collect metrics from.
      */
     MetricServerConfigBuilder collectJettyMetrics(boolean value);
+
+    /**
+     * Enable collection of metrics from the provided jetty server.
+     */
+    MetricServerConfigBuilder collectJettyMetrics(Server jettyServer);
 }

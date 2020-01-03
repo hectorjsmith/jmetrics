@@ -1,5 +1,6 @@
 package org.hsmith.jmetrics.config.impl;
 
+import org.eclipse.jetty.server.Server;
 import org.hsmith.jmetrics.config.MetricServerConfig;
 import org.hsmith.jmetrics.config.MetricServerConfigBuilder;
 import org.hsmith.jmetrics.general.impl.BuilderBase;
@@ -19,6 +20,7 @@ public final class MetricServerConfigBuilderImpl extends BuilderBase implements 
     private int serverIdleTimeout;
     private boolean collectJvmMetrics;
     private boolean collectJettyMetrics;
+    private Server jettyServer;
 
     public MetricServerConfigBuilderImpl() {
         this.withServerHttpPort(MetricServerConfigDefaults.SERVER_PORT)
@@ -80,6 +82,12 @@ public final class MetricServerConfigBuilderImpl extends BuilderBase implements 
     }
 
     @Override
+    public MetricServerConfigBuilder collectJettyMetrics(final Server jettyServer) {
+        this.jettyServer = jettyServer;
+        return this;
+    }
+
+    @Override
     public MetricServerConfig build() {
         if (serverMinThreads > serverMaxThreads) {
             throw new IllegalArgumentException(
@@ -93,7 +101,8 @@ public final class MetricServerConfigBuilderImpl extends BuilderBase implements 
                 this.serverMinThreads,
                 this.serverIdleTimeout,
                 this.collectJvmMetrics,
-                this.collectJettyMetrics
+                this.collectJettyMetrics,
+                this.jettyServer
         );
     }
 }

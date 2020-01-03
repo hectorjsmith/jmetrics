@@ -20,5 +20,8 @@ public interface MetricServer {
      */
     void stopServer();
 
+    /**
+     * Get the Jetty server from which metrics are being collected.
+     */
     Server getJettyServer();
 }
