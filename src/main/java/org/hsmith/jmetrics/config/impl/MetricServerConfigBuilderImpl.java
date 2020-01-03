@@ -84,7 +84,7 @@ public final class MetricServerConfigBuilderImpl extends BuilderBase implements 
     @Override
     public MetricServerConfigBuilder collectJettyMetrics(final Server jettyServer) {
         this.jettyServer = jettyServer;
-        return this;
+        return collectJettyMetrics();
     }
 
     @Override
