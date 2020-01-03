@@ -1,5 +1,7 @@
 package org.hsmith.jmetrics.server;
 
+import org.eclipse.jetty.server.Server;
+
 import java.io.IOException;
 
 /**
@@ -17,4 +19,9 @@ public interface MetricServer {
      * Shutdown the server.
      */
     void stopServer();
+
+    /**
+     * Get the Jetty server from which metrics are being collected.
+     */
+    Server getJettyServer();
 }

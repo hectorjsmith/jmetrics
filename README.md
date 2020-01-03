@@ -50,6 +50,25 @@ MetricServerConfig metricConfig = new MetricServerConfigBuilderImpl()
     .build();
 ```
 
+The `IdleTimeout`, `MinThreads`, and `MaxThread` values are only used if Jetty metrics are being collected and no custom Jetty server was provided.
+When the metrics server creates a Jetty server to collect metrics from it will use these parameters.
+If a custom jetty server is provided these options can be ignored.
+
+### Jetty
+
+It is possible to collect metrics from a Jetty server. This will expose metrics such as total request count, amount of time processing
+requests, bytes sent in responses, etc.
+
+There are two ways to enable collecting metrics from a Jetty server:
+
+1. `metricConfig.collectJettyMetrics()`
+2. `metricConfig.collectJettyMetrics(jettyServer)`
+
+When option 1 is used, a new Jetty server is created by the metrics server and can be retrieved by calling `metricServer.getJettyServer()`.
+Option 2 will take a custom jetty server and collect metrics from it. It is up to the client code to decide which option makes more sense.
+
+*Note:* Calls to the metrics endpoint to collect metrics do not count towards the Jetty metrics.
+
 ### Start server
 
 Then use the config object to build the server object. Also register any other custom collectors you have
