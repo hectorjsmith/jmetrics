@@ -14,11 +14,12 @@
         <java.version>1.8</java.version>
         <log4j.version>1.2.17</log4j.version>
         <slf4j.version>1.7.25</slf4j.version>
-        <javalin.version>3.7.0</javalin.version>
         <prometheus.version>0.8.0</prometheus.version>
+        <jetty.server.version>9.4.25.v20191220</jetty.server.version>
+        <hibernate.version>5.2.11.Final</hibernate.version>
         <junit.jupiter.version>5.4.0</junit.jupiter.version>
         <junit.platform.version>1.2.0</junit.platform.version>
-        <mockito.version>1.10.19</mockito.version>
+        <javalin.version>3.7.0</javalin.version>
         <maven.compiler.version>3.2</maven.compiler.version>
         <maven.surefire.version>2.22.1</maven.surefire.version>
         <maven.siteplugin.version>3.7.1</maven.siteplugin.version>
@@ -37,13 +38,13 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>${jetty.server.version}</version>
+        </dependency>
 
         <!--Metrics dependencies-->
-        <dependency>
-            <groupId>io.javalin</groupId>
-            <artifactId>javalin</artifactId>
-            <version>${javalin.version}</version>
-        </dependency>
         <dependency>
             <groupId>io.prometheus</groupId>
             <artifactId>simpleclient</artifactId>
@@ -64,6 +65,11 @@
             <artifactId>simpleclient_httpserver</artifactId>
             <version>${prometheus.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
 
         <!--Checkstyle dependencies-->
         <dependency>
@@ -73,6 +79,12 @@
         </dependency>
 
         <!--Test dependencies-->
+        <dependency>
+            <groupId>io.javalin</groupId>
+            <artifactId>javalin</artifactId>
+            <version>${javalin.version}</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
@@ -89,12 +101,6 @@
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-runner</artifactId>
             <version>${junit.platform.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
