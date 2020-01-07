@@ -1,7 +1,10 @@
 package org.hsmith.jmetrics.config.impl;
 
 import org.eclipse.jetty.server.Server;
+import org.hibernate.SessionFactory;
 import org.hsmith.jmetrics.config.MetricServerConfig;
+
+import java.util.Objects;
 
 final class MetricServerConfigImpl implements MetricServerConfig {
     private final int serverHttpPort;
@@ -11,6 +14,7 @@ final class MetricServerConfigImpl implements MetricServerConfig {
     private final boolean collectJvmMetrics;
     private final boolean collectJettyMetrics;
     private final Server jettyServer;
+    private final SessionFactory sessionFactory;
 
     MetricServerConfigImpl(
             final int serverHttpPort,
@@ -19,7 +23,8 @@ final class MetricServerConfigImpl implements MetricServerConfig {
             final int serverIdleTimeout,
             final boolean collectJvmMetrics,
             final boolean collectJettyMetrics,
-            final Server jettyServer) {
+            final Server jettyServer,
+            final SessionFactory sessionFactory) {
 
         this.serverHttpPort = serverHttpPort;
         this.serverMaxThreads = serverMaxThreads;
@@ -28,6 +33,7 @@ final class MetricServerConfigImpl implements MetricServerConfig {
         this.collectJvmMetrics = collectJvmMetrics;
         this.collectJettyMetrics = collectJettyMetrics;
         this.jettyServer = jettyServer;
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
@@ -63,5 +69,15 @@ final class MetricServerConfigImpl implements MetricServerConfig {
     @Override
     public Server getJettyServer() {
         return this.jettyServer;
+    }
+
+    @Override
+    public boolean collectHibernateMetrics() {
+        return Objects.nonNull(this.sessionFactory);
+    }
+
+    @Override
+    public SessionFactory getSessionFactory() {
+        return this.sessionFactory;
     }
 }

@@ -40,6 +40,7 @@ final class MetricServerImpl implements MetricServer {
         // Setup metric collectors
         MetricBuilderFactory metricBuilderFactory = new MetricBuilderFactoryImpl();
         setupJettyMetricCollectors(metricBuilderFactory);
+        setupHibernateCollectors(metricBuilderFactory);
         setupMetricCollectors(metricBuilderFactory);
 
         logger.info(String.format("Metrics server started on port: %d", config.getServerHttpPort()));
@@ -74,6 +75,10 @@ final class MetricServerImpl implements MetricServer {
             logger.debug("Initializing Jetty metrics");
             new JettyStatisticsCollector(jettyStatistics, jettyServer.getThreadPool()).initialize(metricBuilderFactory);
         }
+    }
+
+    private void setupHibernateCollectors(final MetricBuilderFactory metricBuilderFactory) {
+
     }
 
     private void setupMetricCollectors(final MetricBuilderFactory metricBuilderFactory) {

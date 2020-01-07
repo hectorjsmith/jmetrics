@@ -1,6 +1,7 @@
 package org.hsmith.jmetrics.config;
 
 import org.eclipse.jetty.server.Server;
+import org.hibernate.SessionFactory;
 import org.hsmith.jmetrics.general.Builder;
 
 /**
@@ -46,4 +47,9 @@ public interface MetricServerConfigBuilder extends Builder<MetricServerConfig> {
      * Enable collection of metrics from the provided jetty server.
      */
     MetricServerConfigBuilder collectJettyMetrics(Server jettyServer);
+
+    /**
+     * Enable collection of hibernate metrics from the provided session factory
+     */
+    MetricServerConfigBuilder collectHibernateMetrics(SessionFactory sessionFactory);
 }
