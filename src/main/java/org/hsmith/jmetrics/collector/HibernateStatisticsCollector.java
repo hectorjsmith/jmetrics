@@ -23,14 +23,20 @@ public final class HibernateStatisticsCollector extends BaseCollector {
     @Override
     protected List<Metric> buildMetrics(final MetricBuilderFactory metricBuilderFactory) {
         List<Metric> metrics = new ArrayList<>();
-        //TODO: Check that statistics are enabled
 
+        metrics.add(metricBuilderFactory.newInstance()
+                .withMetricType(MetricType.GAUGE)
+                .withMetricName("hibernate_statistics_enabled")
+                .withMetricHelp("Whether hibernate statistic collection is enabled")
+                .withMetricSample(() -> sessionFactory.getStatistics().isStatisticsEnabled() ? 1 : 0)
+                .build());
         metrics.add(metricBuilderFactory.newInstance()
                 .withMetricType(MetricType.COUNTER)
                 .withMetricName("hibernate_session_open_count_total")
                 .withMetricHelp("Global number of sessions opened (getSessionOpenCount)")
                 .withMetricSample(() -> sessionFactory.getStatistics().getSessionOpenCount())
                 .build());
+
         return metrics;
     }
 }

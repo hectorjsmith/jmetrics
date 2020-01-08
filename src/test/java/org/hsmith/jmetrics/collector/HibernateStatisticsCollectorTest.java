@@ -35,14 +35,10 @@ public class HibernateStatisticsCollectorTest {
     @Test
     void testGivenHibernateSessionFactoryWhenMetricsEanbledThenMetricsCorrectlyCollected() throws IOException {
         SessionFactory sessionFactory = setupH2Database();
-
+        sessionFactory.getStatistics().setStatisticsEnabled(true);
         assertTrue(sessionFactory.getStatistics().isStatisticsEnabled(), "Statistics should be enabled");
 
-        MetricServerConfig config = new MetricServerConfigBuilderImpl()
-                .withServerHttpPort(TestUtil.TEST_PORT)
-                .collectHibernateMetrics(sessionFactory)
-                .build();
-        MetricServer server =TestUtil.startMetricsServer(config);
+        MetricServer server = startMetricsServerWithHibernate(sessionFactory);
 
         String metricsBefore = TestUtil.collectMetricsFromServer();
 
@@ -77,7 +73,7 @@ public class HibernateStatisticsCollectorTest {
         prop.setProperty("hibernate.connection.username", "sa");
         prop.setProperty("hibernate.connection.password", "sa");
         prop.setProperty("hibernate.hbm2ddl.auto", "create");
-        prop.setProperty("hibernate.generate_statistics", "true");
+        //prop.setProperty("hibernate.generate_statistics", "true");
 
         ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                 .configure()
