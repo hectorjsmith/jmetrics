@@ -42,36 +42,44 @@ Build the configuration object;
 ```java
 MetricServerConfig metricConfig = new MetricServerConfigBuilderImpl()
     .collectJvmMetrics()
-    .collectJettyMetrics()
     .withServerHttpPort(9000)
-    .withServerIdleTimeout(10)
-    .withServerMinThreads(1)
-    .withServerMaxThreads(10)
     .build();
 ```
 
-The `IdleTimeout`, `MinThreads`, and `MaxThread` values are only used if Jetty metrics are being collected and no custom Jetty server was provided.
-When the metrics server creates a Jetty server to collect metrics from it will use these parameters.
-If a custom jetty server is provided these options can be ignored.
+Calling `collectJvmMetrics` will enable collection of standard JVM metrics. These metrics include memory usage, CPU usage, and number of threads. 
 
 ### Jetty
 
 It is possible to collect metrics from a Jetty server. This will expose metrics such as total request count, amount of time processing
 requests, bytes sent in responses, etc.
 
-There are two ways to enable collecting metrics from a Jetty server:
+To collect metrics from a Jetty server you will need to provide the server to the metrics server when it is configured.
 
-1. `metricConfig.collectJettyMetrics()`
-2. `metricConfig.collectJettyMetrics(jettyServer)`
+```java
+metricConfigBuilder.collectJettyMetrics(jettyServer)
+```
 
-When option 1 is used, a new Jetty server is created by the metrics server and can be retrieved by calling `metricServer.getJettyServer()`.
-Option 2 will take a custom jetty server and collect metrics from it. It is up to the client code to decide which option makes more sense.
+*Note:* Calls to the metrics endpoint to collect metrics do not count towards the Jetty metrics because the metrics server uses a different server.
 
-*Note:* Calls to the metrics endpoint to collect metrics do not count towards the Jetty metrics.
+### Hibernate
+
+It is possible to collect hibernate metrics by providing the hibernate session factory to the metric config builder.
+
+
+```java
+metricConfigBuilder.collectHibernateMetrics(sessionFactory)
+```
+
+Ensure that statistic collection is enabled on the hibernate side to ensure metrics are collected.
+You can enable statistics on hibernate either by setting the `generate_statistics` property to true, or by calling the following method:
+
+```java
+sessionFactory.getStatistics().setStatisticsEnabled(true);
+```
 
 ### Start server
 
-Then use the config object to build the server object. Also register any other custom collectors you have
+Then use the config object to build the server object. Also make sure to register any other custom collectors you have
 defined when building the server. It is not possible to register them after the server is built.
 
 ```java

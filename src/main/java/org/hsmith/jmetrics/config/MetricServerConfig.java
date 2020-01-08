@@ -9,12 +9,6 @@ import org.hibernate.SessionFactory;
 public interface MetricServerConfig {
     int getServerHttpPort();
 
-    int getServerMaxThreads();
-
-    int getServerMinThreads();
-
-    int getServerIdleTimout();
-
     boolean collectJvmMetrics();
 
     boolean collectJettyMetrics();

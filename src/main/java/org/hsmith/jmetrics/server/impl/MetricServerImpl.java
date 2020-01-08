@@ -6,7 +6,6 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.StatisticsHandler;
-import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.hibernate.stat.Statistics;
 import org.hsmith.jmetrics.collector.Collector;
 import org.hsmith.jmetrics.collector.HibernateStatisticsCollector;
@@ -23,14 +22,12 @@ final class MetricServerImpl implements MetricServer {
     private final Logger logger;
     private final MetricServerConfig config;
     private final Set<Collector> collectorSet;
-    private Server jettyServer;
     private HTTPServer httpServer;
 
     MetricServerImpl(final MetricServerConfig config,
                      final Set<Collector> collectorSet) {
         this.logger = LogManager.getLogger(this.getClass());
         this.config = config;
-        this.jettyServer = config.getJettyServer();
         this.collectorSet = collectorSet;
     }
 
@@ -56,31 +53,23 @@ final class MetricServerImpl implements MetricServer {
 
     @Override
     public Server getJettyServer() {
-        return jettyServer;
+        return config.getJettyServer();
     }
 
     private void setupJettyMetricCollectors(final MetricBuilderFactory metricBuilderFactory) {
         if (config.collectJettyMetrics()) {
-            // Setup new jetty server if none provided
-            if (jettyServer == null) {
-                QueuedThreadPool queuedThreadPool = new QueuedThreadPool(
-                        config.getServerMaxThreads(),
-                        config.getServerMinThreads(),
-                        config.getServerIdleTimout());
-                jettyServer = new Server(queuedThreadPool);
-            }
-
-            // Setup statistics handler
-            StatisticsHandler jettyStatistics = new StatisticsHandler();
-            jettyServer.setHandler(jettyStatistics);
-
             logger.debug("Initializing Jetty metrics");
-            new JettyStatisticsCollector(jettyStatistics, jettyServer.getThreadPool()).initialize(metricBuilderFactory);
+
+            StatisticsHandler jettyStatistics = new StatisticsHandler();
+            config.getJettyServer().setHandler(jettyStatistics);
+            new JettyStatisticsCollector(jettyStatistics, config.getJettyServer().getThreadPool())
+                    .initialize(metricBuilderFactory);
         }
     }
 
     private void setupHibernateCollectors(final MetricBuilderFactory metricBuilderFactory) {
         if (config.collectHibernateMetrics()) {
+            logger.debug("Initializing Hibernate metrics");
             Statistics hibernateStatistics = config.getSessionFactory().getStatistics();
             new HibernateStatisticsCollector(hibernateStatistics).initialize(metricBuilderFactory);
         }
