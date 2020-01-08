@@ -8,6 +8,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.StatisticsHandler;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.hsmith.jmetrics.collector.Collector;
+import org.hsmith.jmetrics.collector.HibernateStatisticsCollector;
 import org.hsmith.jmetrics.collector.JettyStatisticsCollector;
 import org.hsmith.jmetrics.config.MetricServerConfig;
 import org.hsmith.jmetrics.metrics.MetricBuilderFactory;
@@ -78,7 +79,9 @@ final class MetricServerImpl implements MetricServer {
     }
 
     private void setupHibernateCollectors(final MetricBuilderFactory metricBuilderFactory) {
-
+        if (config.collectHibernateMetrics()) {
+            new HibernateStatisticsCollector(config.getSessionFactory()).initialize(metricBuilderFactory);
+        }
     }
 
     private void setupMetricCollectors(final MetricBuilderFactory metricBuilderFactory) {
