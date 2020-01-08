@@ -36,25 +36,6 @@ class JettyStatisticsCollectorTest {
     }
 
     @Test
-    void testGivenJettyServerCreatedByMetricsServerWhenMetricsEnabledAndRequestsMadeThenMetricsShowRequestNumber()
-            throws Exception {
-
-        MetricServer metrics = startMetricsServer();
-
-        int requestNumber = 10;
-        String metricsBefore = TestUtil.collectMetricsFromServer();
-        startJettyServerAndMakeRequests(metrics, requestNumber);
-        String metricsAfter = TestUtil.collectMetricsFromServer();
-
-        metrics.stopServer();
-
-        assertEquals(0.0, TestUtil.getMetricValue(metricsBefore, requestCountRegex),
-                "Number of requests should be 0");
-        assertEquals(requestNumber, TestUtil.getMetricValue(metricsAfter, requestCountRegex),
-                "Expected number of requests measured to match number of requests made");
-    }
-
-    @Test
     void testGivenJettyServerCreatedByJavalinWhenMetricsEnabledAndRequestsMadeThenMetricsShowRequestNumber()
             throws Exception {
 
@@ -76,15 +57,6 @@ class JettyStatisticsCollectorTest {
                 "Number of requests should be 0");
         assertEquals(requestNumber, TestUtil.getMetricValue(metricsAfter, requestCountRegex),
                 "Expected number of requests measured to match number of requests made");
-    }
-
-    private MetricServer startMetricsServer() throws IOException {
-        MetricServerConfig config = new MetricServerConfigBuilderImpl()
-                .withServerHttpPort(TestUtil.TEST_PORT)
-                .collectJettyMetrics()
-                .build();
-
-        return TestUtil.startMetricsServer(config);
     }
 
     private MetricServer startMetricsServerWithJettyServer(Server jettyServer) throws IOException {

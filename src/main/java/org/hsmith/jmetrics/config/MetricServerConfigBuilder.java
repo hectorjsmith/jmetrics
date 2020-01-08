@@ -14,12 +14,6 @@ public interface MetricServerConfigBuilder extends Builder<MetricServerConfig> {
      */
     MetricServerConfigBuilder withServerHttpPort(int serverHttpPort);
 
-    MetricServerConfigBuilder withServerMaxThreads(int serverMaxThreads);
-
-    MetricServerConfigBuilder withServerMinThreads(int serverMinThreads);
-
-    MetricServerConfigBuilder withServerIdleTimeout(int serverIdleTimout);
-
     /**
      * Collect JVM metrics. This will export metrics related to the Java JVM this application is running on.
      */
@@ -30,18 +24,6 @@ public interface MetricServerConfigBuilder extends Builder<MetricServerConfig> {
      * This will export metrics related the Java JVM this application is running on.
      */
     MetricServerConfigBuilder collectJvmMetrics(boolean value);
-
-    /**
-     * Collect Jetty metrics.
-     * The metrics server will create a new Jetty server instance to collect metrics from.
-     */
-    MetricServerConfigBuilder collectJettyMetrics();
-
-    /**
-     * Enable/disable collection of Jetty metrics.
-     * The metrics server will create a new Jetty server instance to collect metrics from.
-     */
-    MetricServerConfigBuilder collectJettyMetrics(boolean value);
 
     /**
      * Enable collection of metrics from the provided jetty server.
