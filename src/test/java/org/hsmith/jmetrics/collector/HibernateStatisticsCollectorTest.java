@@ -14,13 +14,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class HibernateStatisticsCollectorTest {
-    private static final String sessionOpenCountRegex = ".*hibernate_session_open_count_total ([0-9]+).*";
+    private static final String sessionOpenCountRegex = ".*hibernate_session_opened_total ([0-9]+).*";
 
     @BeforeAll
     static void loggerSetup() {
