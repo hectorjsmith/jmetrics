@@ -32,7 +32,7 @@ public class HibernateStatisticsCollectorTest {
     }
 
     @Test
-    void testGivenHibernateSessionFactoryWhenMetricsEanbledThenMetricsCorrectlyCollected() throws IOException {
+    void testGivenHibernateSessionFactoryWhenMetricsEnabledThenMetricsCorrectlyCollected() throws IOException {
         SessionFactory sessionFactory = setupH2Database();
         sessionFactory.getStatistics().setStatisticsEnabled(true);
         assertTrue(sessionFactory.getStatistics().isStatisticsEnabled(), "Statistics should be enabled");
