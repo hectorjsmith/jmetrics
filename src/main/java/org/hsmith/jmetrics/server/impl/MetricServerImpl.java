@@ -7,7 +7,9 @@ import org.apache.log4j.Logger;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.StatisticsHandler;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
+import org.hibernate.stat.Statistics;
 import org.hsmith.jmetrics.collector.Collector;
+import org.hsmith.jmetrics.collector.HibernateStatisticsCollector;
 import org.hsmith.jmetrics.collector.JettyStatisticsCollector;
 import org.hsmith.jmetrics.config.MetricServerConfig;
 import org.hsmith.jmetrics.metrics.MetricBuilderFactory;
@@ -40,6 +42,7 @@ final class MetricServerImpl implements MetricServer {
         // Setup metric collectors
         MetricBuilderFactory metricBuilderFactory = new MetricBuilderFactoryImpl();
         setupJettyMetricCollectors(metricBuilderFactory);
+        setupHibernateCollectors(metricBuilderFactory);
         setupMetricCollectors(metricBuilderFactory);
 
         logger.info(String.format("Metrics server started on port: %d", config.getServerHttpPort()));
@@ -73,6 +76,13 @@ final class MetricServerImpl implements MetricServer {
 
             logger.debug("Initializing Jetty metrics");
             new JettyStatisticsCollector(jettyStatistics, jettyServer.getThreadPool()).initialize(metricBuilderFactory);
+        }
+    }
+
+    private void setupHibernateCollectors(final MetricBuilderFactory metricBuilderFactory) {
+        if (config.collectHibernateMetrics()) {
+            Statistics hibernateStatistics = config.getSessionFactory().getStatistics();
+            new HibernateStatisticsCollector(hibernateStatistics).initialize(metricBuilderFactory);
         }
     }
 
