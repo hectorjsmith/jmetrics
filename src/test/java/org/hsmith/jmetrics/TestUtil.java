@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestUtil {
     public static final String HTTP_LOCALHOST = "http://localhost:";
-    public static final int TEST_PORT = 9980;
+    public static final int TEST_PORT = 51735;
 
     public static void setupLoggerForTests() {
         Properties props = new Properties();

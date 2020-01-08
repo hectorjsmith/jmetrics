@@ -15,7 +15,7 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class JettyStatisticsCollectorTest {
-    private static final int testServerPort = 11994;
+    private static final int testServerPort = TestUtil.TEST_PORT + 1;
     private static final String testServerResponse = "Hello World";
     private static final String requestCountRegex = ".*jetty_requests_total ([0-9]+).*";
 
