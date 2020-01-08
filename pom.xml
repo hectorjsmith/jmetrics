@@ -20,6 +20,7 @@
         <junit.jupiter.version>5.4.0</junit.jupiter.version>
         <junit.platform.version>1.2.0</junit.platform.version>
         <javalin.version>3.7.0</javalin.version>
+        <hibernate.h2.version>1.4.196</hibernate.h2.version>
         <maven.compiler.version>3.2</maven.compiler.version>
         <maven.surefire.version>2.22.1</maven.surefire.version>
         <maven.siteplugin.version>3.7.1</maven.siteplugin.version>
@@ -83,6 +84,12 @@
             <groupId>io.javalin</groupId>
             <artifactId>javalin</artifactId>
             <version>${javalin.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${hibernate.h2.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

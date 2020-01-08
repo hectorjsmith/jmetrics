@@ -4,7 +4,6 @@ import org.hibernate.SessionFactory;
 import org.hsmith.jmetrics.metrics.Metric;
 import org.hsmith.jmetrics.metrics.MetricBuilderFactory;
 import org.hsmith.jmetrics.metrics.MetricType;
-import org.hibernate.stat.Statistics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +23,8 @@ public final class HibernateStatisticsCollector extends BaseCollector {
     @Override
     protected List<Metric> buildMetrics(final MetricBuilderFactory metricBuilderFactory) {
         List<Metric> metrics = new ArrayList<>();
+        //TODO: Check that statistics are enabled
+
         metrics.add(metricBuilderFactory.newInstance()
                 .withMetricType(MetricType.COUNTER)
                 .withMetricName("hibernate_session_open_count_total")
