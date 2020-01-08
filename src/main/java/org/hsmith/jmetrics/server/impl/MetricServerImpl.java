@@ -22,14 +22,12 @@ final class MetricServerImpl implements MetricServer {
     private final Logger logger;
     private final MetricServerConfig config;
     private final Set<Collector> collectorSet;
-    private Server jettyServer;
     private HTTPServer httpServer;
 
     MetricServerImpl(final MetricServerConfig config,
                      final Set<Collector> collectorSet) {
         this.logger = LogManager.getLogger(this.getClass());
         this.config = config;
-        this.jettyServer = config.getJettyServer();
         this.collectorSet = collectorSet;
     }
 
@@ -55,7 +53,7 @@ final class MetricServerImpl implements MetricServer {
 
     @Override
     public Server getJettyServer() {
-        return jettyServer;
+        return config.getJettyServer();
     }
 
     private void setupJettyMetricCollectors(final MetricBuilderFactory metricBuilderFactory) {
@@ -63,8 +61,9 @@ final class MetricServerImpl implements MetricServer {
             logger.debug("Initializing Jetty metrics");
 
             StatisticsHandler jettyStatistics = new StatisticsHandler();
-            jettyServer.setHandler(jettyStatistics);
-            new JettyStatisticsCollector(jettyStatistics, jettyServer.getThreadPool()).initialize(metricBuilderFactory);
+            config.getJettyServer().setHandler(jettyStatistics);
+            new JettyStatisticsCollector(jettyStatistics, config.getJettyServer().getThreadPool())
+                    .initialize(metricBuilderFactory);
         }
     }
 
