@@ -1,6 +1,7 @@
 package org.hsmith.jmetrics.config;
 
 import org.eclipse.jetty.server.Server;
+import org.hibernate.SessionFactory;
 
 /**
  * Configuration for the metrics server.
@@ -8,15 +9,13 @@ import org.eclipse.jetty.server.Server;
 public interface MetricServerConfig {
     int getServerHttpPort();
 
-    int getServerMaxThreads();
-
-    int getServerMinThreads();
-
-    int getServerIdleTimout();
-
     boolean collectJvmMetrics();
 
     boolean collectJettyMetrics();
 
     Server getJettyServer();
+
+    boolean collectHibernateMetrics();
+
+    SessionFactory getSessionFactory();
 }

@@ -4,6 +4,9 @@ import io.prometheus.client.CollectorRegistry;
 import io.prometheus.client.hotspot.DefaultExports;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.PropertyConfigurator;
+import org.hsmith.jmetrics.config.MetricServerConfig;
+import org.hsmith.jmetrics.server.MetricServer;
+import org.hsmith.jmetrics.server.impl.MetricServerBuilderImpl;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -14,10 +17,14 @@ import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestUtil {
     public static final String HTTP_LOCALHOST = "http://localhost:";
-    public static final int TEST_PORT = 9980;
+    public static final int TEST_PORT = 51735;
 
     public static void setupLoggerForTests() {
         Properties props = new Properties();
@@ -99,5 +106,27 @@ public class TestUtil {
         Field field = DefaultExports.class.getDeclaredField("initialized");
         field.setAccessible(true);
         field.set(null, false);
+    }
+
+    public static MetricServer startMetricsServer(MetricServerConfig config) throws IOException {
+        MetricServer metricServer = new MetricServerBuilderImpl(config)
+                .build();
+
+        metricServer.startServer();
+        return metricServer;
+    }
+
+    public static String collectMetricsFromServer() throws IOException {
+        return getWebpageContent(TestUtil.HTTP_LOCALHOST + TestUtil.TEST_PORT);
+    }
+
+    public static long getMetricValue(String metrics, String regexString) {;
+        Pattern p = Pattern.compile(regexString, Pattern.DOTALL);
+
+        Matcher matcher = p.matcher(metrics);
+        assertTrue(matcher.matches(), "Metrics data should match regex");
+
+        String requestNumStr = matcher.group(1);
+        return Long.parseLong(requestNumStr);
     }
 }

@@ -6,20 +6,18 @@ import org.hsmith.jmetrics.TestUtil;
 import org.hsmith.jmetrics.config.MetricServerConfig;
 import org.hsmith.jmetrics.config.impl.MetricServerConfigBuilderImpl;
 import org.hsmith.jmetrics.server.MetricServer;
-import org.hsmith.jmetrics.server.impl.MetricServerBuilderImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class JettyStatisticsCollectorTest {
-    private static final int testServerPort = 11994;
+    private static final int testServerPort = TestUtil.TEST_PORT + 1;
     private static final String testServerResponse = "Hello World";
+    private static final String requestCountRegex = ".*jetty_requests_total ([0-9]+).*";
 
     @BeforeAll
     static void loggerSetup() {
@@ -38,25 +36,6 @@ class JettyStatisticsCollectorTest {
     }
 
     @Test
-    void testGivenJettyServerCreatedByMetricsServerWhenMetricsEnabledAndRequestsMadeThenMetricsShowRequestNumber()
-            throws Exception {
-
-        MetricServer metrics = startMetricsServer();
-
-        int requestNumber = 10;
-        String metricsBefore = collectMetricsFromServer();
-        startJettyServerAndMakeRequests(metrics, requestNumber);
-        String metricsAfter = collectMetricsFromServer();
-
-        metrics.stopServer();
-
-        assertEquals(0.0, getRequestNumberFromMetrics(metricsBefore),
-                "Number of requests should be 0");
-        assertEquals(requestNumber, getRequestNumberFromMetrics(metricsAfter),
-                "Expected number of requests measured to match number of requests made");
-    }
-
-    @Test
     void testGivenJettyServerCreatedByJavalinWhenMetricsEnabledAndRequestsMadeThenMetricsShowRequestNumber()
             throws Exception {
 
@@ -67,30 +46,17 @@ class JettyStatisticsCollectorTest {
         app.start(testServerPort);
 
         int requestNumber = 10;
-        String metricsBefore = collectMetricsFromServer();
+        String metricsBefore = TestUtil.collectMetricsFromServer();
         makeRequests(requestNumber);
-        String metricsAfter = collectMetricsFromServer();
+        String metricsAfter = TestUtil.collectMetricsFromServer();
 
         app.stop();
         metrics.stopServer();
 
-        assertEquals(0.0, getRequestNumberFromMetrics(metricsBefore),
+        assertEquals(0.0, TestUtil.getMetricValue(metricsBefore, requestCountRegex),
                 "Number of requests should be 0");
-        assertEquals(requestNumber, getRequestNumberFromMetrics(metricsAfter),
+        assertEquals(requestNumber, TestUtil.getMetricValue(metricsAfter, requestCountRegex),
                 "Expected number of requests measured to match number of requests made");
-    }
-
-    private MetricServer startMetricsServer() throws IOException {
-        MetricServerConfig config = new MetricServerConfigBuilderImpl()
-                .withServerHttpPort(TestUtil.TEST_PORT)
-                .collectJettyMetrics()
-                .build();
-
-        MetricServer metricServer = new MetricServerBuilderImpl(config)
-                .build();
-
-        metricServer.startServer();
-        return metricServer;
     }
 
     private MetricServer startMetricsServerWithJettyServer(Server jettyServer) throws IOException {
@@ -99,26 +65,7 @@ class JettyStatisticsCollectorTest {
                 .collectJettyMetrics(jettyServer)
                 .build();
 
-        MetricServer metricServer = new MetricServerBuilderImpl(config)
-                .build();
-
-        metricServer.startServer();
-        return metricServer;
-    }
-
-    private String collectMetricsFromServer() throws IOException {
-        return TestUtil.getWebpageContent(TestUtil.HTTP_LOCALHOST + TestUtil.TEST_PORT);
-    }
-
-    private double getRequestNumberFromMetrics(String metrics) {
-        String regexStr = ".*jetty_requests_total ([0-9]+).*";
-        Pattern p = Pattern.compile(regexStr, Pattern.DOTALL);
-
-        Matcher matcher = p.matcher(metrics);
-        assertTrue(matcher.matches(), "Metrics data should match regex");
-
-        String requestNumStr = matcher.group(1);
-        return Integer.parseInt(requestNumStr);
+        return TestUtil.startMetricsServer(config);
     }
 
     private void startJettyServerAndMakeRequests(MetricServer metricServer, int requestNumber) throws Exception {
