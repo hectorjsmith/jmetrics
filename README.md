@@ -14,13 +14,15 @@ Custom collectors need to override the `buildMetrics` method to build the custom
 ```java
 public class MyNewCollector extends BaseCollector implements Collector {
     @Override
-    protected void buildMetrics(MetricBuilderFactory metricBuilderFactory) {
-        addMetric(metricBuilderFactory.newInstance()
+    protected List<Metric> buildMetrics(final MetricBuilderFactory metricBuilderFactory) {
+        List<Metric> metrics = new ArrayList<>();
+        metrics.add(metricBuilderFactory.newInstance()
                 .withMetricType(MetricType.COUNTER)
                 .withMetricName("test_metric")
                 .withMetricHelp("Test metric")
                 .withMetricSample(() -> someValueOrFunction)
                 .build());
+        return metrics;
     }
 
     @Override
