@@ -1,6 +1,6 @@
 # JMetrics
 
-[![pipeline status](https://gitlab.com/java.libraries/jmetrics/badges/master/pipeline.svg)](https://gitlab.com/java.libraries/jmetrics/commits/master)
+[![pipeline status](https://gitlab.com/hectorjsmith/jmetrics/badges/master/pipeline.svg)](https://gitlab.com/hectorjsmith/jmetrics/-/commits/master)
 
 Java metrics library to facilitate using the prometheus metrics framework.
 
