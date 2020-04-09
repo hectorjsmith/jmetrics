@@ -25,7 +25,7 @@
         <maven.surefire.version>2.22.1</maven.surefire.version>
         <maven.siteplugin.version>3.7.1</maven.siteplugin.version>
         <maven.checkstyle.version>3.0.0</maven.checkstyle.version>
-        <puppycrawl.checkstyle.version>8.19</puppycrawl.checkstyle.version>
+        <puppycrawl.checkstyle.version>8.29</puppycrawl.checkstyle.version>
     </properties>
 
     <dependencies>
